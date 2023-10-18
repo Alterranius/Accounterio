@@ -1,0 +1,6 @@
+services:
+  db_pg_15:
+    image: postgres:15
+    container_name: accounterio_postgres
+    env_file:
+      - .env

@@ -1,0 +1,133 @@
+asyncapi: '2.6.0'
+info:
+  title: Accounterio API
+  version: '1.0'
+  description: |
+    The Accounterio API for yout cost management
+servers:
+  Cost-Management:
+    url: localhost:8080
+    protocol: https
+    description: Main Core artifact, provides REST API
+    tags:
+      - name: "kind:remote"
+        description: "This server is a remote server. Not exposed by the application"
+      - name: "visibility:public"
+        description: "This resource is public"
+  rabbitmq-connection:
+    url: localhost:18092
+    protocol: amqp
+    description: Task Handler
+    tags:
+      - name: "kind:embedded"
+        description: "This server is an embedded server. Exposed by the application"
+      - name: "visibility:private"
+        description: "This resource is private"
+  camunda-connection:
+    url: localhost:28092
+    protocol: jms
+    description: Camunda BPMN processor
+    tags:
+      - name: "kind:embedded"
+        description: "This server is an embedded server. Exposed by the application"
+      - name: "visibility:private"
+        description: "This resource is private"
+  Receipt-Processor:
+    url: localhost:9090
+    protocol: jms
+    description: AI classification and vision artifact
+    tags:
+      - name: "kind:remote"
+        description: "This server is a remote server. Not exposed by the application"
+      - name: "visibility:private"
+        description: "This resource is private"
+  Telegram-Bot:
+    url: localhost:1020
+    protocol: https
+    description: Just telegram bot app
+    tags:
+      - name: "kind:remote"
+        description: "This server is a remote server. Not exposed by the application"
+      - name: "visibility:private"
+        description: "This resource is private"
+  Consulting-Service:
+    url: localhost:1040
+    protocol: https
+    description: LLM-powered service to perform consulting tasks and summarize 
+    tags:
+      - name: "kind:remote"
+        description: "This server is a remote server. Not exposed by the application"
+      - name: "visibility:public"
+        description: "This resource is public"
+defaultContentType: application/json
+
+channels:
+  costmanagement.tasks.1.0.costchannel:
+    description: Send new cost set
+    subscribe:
+      operationId: receiveCostSet
+    publish:
+      operationId: sendCostSet
+
+components:
+  messages:
+    addCostSet:
+      name: addCostSet
+      title: Add CostSet
+      summary: Add new costSet for user
+      contentType: application/json
+      traits:
+        - $ref: '#/components/messageTraits/commonHeaders'
+      payload:
+        $ref: "#/components/schemas/costSetPayload"
+
+  schemas:
+    costSetPayload:
+      type: object
+      properties:
+        costSet:
+          type: object
+          description: A set of costs
+    turnOnOffPayload:
+      type: object
+      properties:
+        command:
+          type: string
+          enum:
+            - on
+            - off
+          description: Whether to turn on or off the light.
+        sentAt:
+          $ref: "#/components/schemas/sentAt"
+    dimLightPayload:
+      type: object
+      properties:
+        percentage:
+          type: integer
+          description: Percentage to which the light should be dimmed to.
+          minimum: 0
+          maximum: 100
+        sentAt:
+          $ref: "#/components/schemas/sentAt"
+    sentAt:
+      type: string
+      format: date-time
+      description: Date and time when the message was sent.
+
+  parameters:
+    userId:
+      description: The ID of user.
+      schema:
+        type: integer
+    costSet:
+      description: A set of costs
+      schema: 
+        type: object
+
+  messageTraits:
+    commonHeaders:
+      headers:
+        type: object
+        properties:
+          userToken:
+            type: string

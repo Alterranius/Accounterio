@@ -1,0 +1,10 @@
+spring:
+  sql:
+    init:
+      mode: always
+
+  docker:
+    compose:
+      enabled: true
+      skip:
+        in-tests: true # test containers used
