@@ -18,7 +18,7 @@ public class UserData {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     private User user;
 
     @Pattern(regexp = "\\d{11}", message = "Неверный формат телефона")

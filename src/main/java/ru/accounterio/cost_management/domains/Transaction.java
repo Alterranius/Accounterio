@@ -30,4 +30,6 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
+
+    public boolean isExpense() { return value < 0d; }
 }
