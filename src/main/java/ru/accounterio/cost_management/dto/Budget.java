@@ -1,4 +1,4 @@
 package ru.accounterio.cost_management.dto;
 
-public interface Budget {
+public record Budget(double value) {
 }

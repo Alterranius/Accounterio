@@ -1,0 +1,21 @@
+@startuml
+
+actor User
+participant Bot
+participant Core
+participant Processor
+database postgres
+
+User -> Bot : command
+Bot -> Core : request
+Core ->> Processor : call
+Core --> Bot : ok
+Bot --> User : message
+Processor ->> Core : costSet
+Processor -> Core : complete
+Core ->> Bot : note
+Core --> Processor : ok
+Bot ->> User : note
+Core ->> postgres : data
+
+@enduml
