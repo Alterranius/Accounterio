@@ -15,7 +15,7 @@ servers:
       - name: "visibility:public"
         description: "This resource is public"
   rabbitmq-connection:
-    url: localhost:18092
+    url: localhost:5672
     protocol: amqp
     description: Task Handler
     tags:

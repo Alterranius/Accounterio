@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories
 @EnableJpaAuditing
 @EnableTransactionManagement
-public class Application {
+public class AccounterioCoreApplication {
 
   public static void main(String... args) {
-    SpringApplication.run(Application.class, args);
+    SpringApplication.run(AccounterioCoreApplication.class, args);
   }
 
 }

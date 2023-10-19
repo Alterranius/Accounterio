@@ -17,7 +17,11 @@ spring:
       enabled: true
       skip:
         in-tests: true # test containers used
-
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: admin
+    port: 5672
 
 camunda:
   bpm:

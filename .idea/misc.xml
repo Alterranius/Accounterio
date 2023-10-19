@@ -5,6 +5,9 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/receiptai_processor/pom.xml" />
+        <option value="$PROJECT_DIR$/consulter_core/pom.xml" />
+        <option value="$PROJECT_DIR$/tele_core/pom.xml" />
       </list>
     </option>
   </component>

@@ -6,8 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="consulter_core" />
+        <module name="tele_core" />
+        <module name="receiptai_processor" />
         <module name="accounterio_core" />
       </profile>
     </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="consulter_core" options="-parameters" />
+      <module name="receiptai_processor" options="-parameters" />
+      <module name="tele_core" options="-parameters" />
+    </option>
   </component>
 </project>
