@@ -1,6 +1,7 @@
 package ru.accounterio.cost_management.domains;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -34,5 +35,16 @@ public class Transaction {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public boolean isExpense() { return value < 0d; }
+    public boolean isExpense() {
+        return value < 0d;
+    }
+
+    public boolean isIncome() {
+        return !isExpense();
+    }
+
+    @Override
+    public int compareTo(@NotNull Transaction o) {
+        return this.getStamp().compareTo(o.getStamp());
+    }
 }

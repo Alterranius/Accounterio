@@ -18,7 +18,7 @@ public class UserServiceSimple implements UserService {
 
     @Override
     public Long addUser(User user) {
-        return null;
+        return userRepository.save(user).getId();
     }
 
     @Override
@@ -28,6 +28,6 @@ public class UserServiceSimple implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
-
+        userRepository.findById(userId).ifPresent(userRepository::delete);
     }
 }

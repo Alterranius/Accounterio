@@ -5,7 +5,7 @@ import ru.accounterio.cost_management.domains.Transaction;
 import ru.accounterio.cost_management.dto.Budget;
 import ru.accounterio.cost_management.dto.TransactionChain;
 
-import java.util.List;
+import java.util.Set;
 
 public interface BudgetService {
     Budget getBudget(Long userId) throws BudgetServiceException;
@@ -16,6 +16,6 @@ public interface BudgetService {
     void deleteTransaction(Long id) throws BudgetServiceException;
     void updateTransactionValue(Long id, double value) throws BudgetServiceException;
     void updateTransactionCategory(Long transId, int categoryId) throws BudgetServiceException;
-    List<Category> getCategories(Long userId) throws BudgetServiceException;
+    Set<Category> getCategories(Long userId) throws BudgetServiceException;
 
 }

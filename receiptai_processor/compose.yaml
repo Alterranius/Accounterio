@@ -1,8 +1,0 @@
-services:
-  rabbitmq:
-    image: 'rabbitmq:latest'
-    environment:
-      - 'RABBITMQ_DEFAULT_PASS=admin'
-      - 'RABBITMQ_DEFAULT_USER=admin'
-    ports:
-      - '5672'

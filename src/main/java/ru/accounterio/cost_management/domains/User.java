@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -26,8 +26,8 @@ public class User {
     private UserData userData;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Category> categories;
+    private Set<Category> categories;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    private Set<Transaction> transactions;
 }

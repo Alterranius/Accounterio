@@ -3,7 +3,7 @@ package ru.accounterio.cost_management.domains;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
@@ -27,6 +27,6 @@ public class Category {
     private User user;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
+    private Set<Transaction> transactions;
 
 }

@@ -3,11 +3,6 @@ spring:
     init:
       mode: always
 
-  docker:
-    compose:
-      enabled: true
-      skip:
-        in-tests: true # test containers used
   rabbitmq:
     host: localhost
     username: admin

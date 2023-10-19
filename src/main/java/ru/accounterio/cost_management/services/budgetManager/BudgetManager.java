@@ -13,7 +13,10 @@ import ru.accounterio.cost_management.interfaces.budget.BudgetService;
 import ru.accounterio.cost_management.repositories.postgres.CategoryRepository;
 import ru.accounterio.cost_management.repositories.postgres.TransactionRepository;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j
@@ -25,46 +28,57 @@ public class BudgetManager implements BudgetService {
 
     @Override
     public Budget getBudget(Long userId) {
-        return null;
+        return new Budget(transactionRepository.findTransactionsByUser_Id(userId).stream().mapToDouble(Transaction::getValue).sum());
     }
 
     @Override
     public TransactionChain getTransactions(Long userId) {
-        return null;
+        return new TransactionChain(userId, Collections.unmodifiableSortedSet(new TreeSet<>(transactionRepository.findTransactionsByUser_Id(userId))));
     }
 
     @Override
     public TransactionChain getIncomes(Long userId) {
-        return null;
+        return new TransactionChain(userId, Collections.unmodifiableSortedSet(new TreeSet<>(transactionRepository.findTransactionsByUser_Id(userId).stream()
+                .filter(Transaction::isIncome).collect(Collectors.toSet()))));
     }
 
     @Override
     public TransactionChain getExpenses(Long userId) {
-        return null;
+        return new TransactionChain(userId, Collections.unmodifiableSortedSet(new TreeSet<>(transactionRepository.findTransactionsByUser_Id(userId).stream()
+                .filter(Transaction::isExpense).collect(Collectors.toSet()))));
     }
 
     @Override
     public Long addTransaction(Transaction transaction) {
-        return null;
+        return transactionRepository.save(transaction).getId();
     }
 
     @Override
     public void deleteTransaction(Long id) {
-
+        transactionRepository.findById(id).ifPresent(transactionRepository::delete);
     }
 
     @Override
     public void updateTransactionValue(Long id, double value) {
-
+        transactionRepository.findById(id).ifPresent(t -> {
+            t.setValue(value);
+            transactionRepository.save(t);
+        });
     }
 
     @Override
     public void updateTransactionCategory(Long transId, int categoryId) {
-
+        transactionRepository.findById(transId).ifPresent(trans -> {
+            categoryRepository.findById(categoryId).ifPresent(cat -> {
+                trans.setCategory(cat);
+                cat.getTransactions().add(trans);
+            });
+            transactionRepository.save(trans);
+        });
     }
 
     @Override
-    public List<Category> getCategories(Long userId) {
-        return null;
+    public Set<Category> getCategories(Long userId) {
+        return categoryRepository.findCategoriesByUser_Id(userId);
     }
 }

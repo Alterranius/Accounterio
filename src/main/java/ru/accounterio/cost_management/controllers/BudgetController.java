@@ -12,7 +12,7 @@ import ru.accounterio.cost_management.dto.Budget;
 import ru.accounterio.cost_management.dto.TransactionChain;
 import ru.accounterio.cost_management.interfaces.budget.BudgetService;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/budget")
@@ -81,7 +81,7 @@ public class BudgetController {
 
     @Operation(summary = "Get User Categories")
     @GetMapping("/getCategories/{user_id}")
-    public List<Category> getCategories(@PathVariable("user_id") Long id) {
+    public Set<Category> getCategories(@PathVariable("user_id") Long id) {
 
     }
 }

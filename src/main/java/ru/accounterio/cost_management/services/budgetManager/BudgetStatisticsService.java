@@ -11,7 +11,9 @@ import ru.accounterio.cost_management.interfaces.statistics.StatisticsService;
 import ru.accounterio.cost_management.repositories.postgres.TransactionRepository;
 
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.stream.Stream;
 
 @Service
 @Log4j
@@ -21,7 +23,9 @@ public class BudgetStatisticsService implements StatisticsService {
     TransactionRepository transactionRepository;
 
     @Override
-    public Map<LocalDate, Balance> getPeriodic(Periods period, Long userId) {
+    public SortedMap<LocalDate, Balance> getPeriodic(Periods period, Long userId) {
+        // TODO: 20.10.2023 statistics former
+        SortedSet<LocalDate> dates;
         return null;
     }
 }
