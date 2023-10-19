@@ -19,4 +19,17 @@ public class ReceiptBotShares {
     public static final String UNKNOWN_MESSAGE = """
             Извините, но такой команды я не поддерживаю...
             """;
+
+    public static final String WRONG_PHOTO = """
+            Извините, но вы не отправили фото чека ^_^
+            """;
+    public static final String PROCESSING_MESSAGE = """
+            Сервис обрабатывает запрос. Подождите ответа...
+            """;
+    public static final String SERVICE_ERROR_MESSAGE = """
+            К сожалению сервис сейчас не доступен и не может обработать ваш запрос( 
+            """;
+    public static final String ASK_IMAGE_MESSAGE = """
+            Отправьте фотографию чека
+            """;
 }

@@ -2,40 +2,48 @@ package ru.accounterio.telegram_bot.tele_core.bot;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.accounterio.telegram_bot.tele_core.bot.actions.AdviceAction;
+import ru.accounterio.telegram_bot.tele_core.bot.actions.ConsultAction;
+import ru.accounterio.telegram_bot.tele_core.bot.actions.PhotoAction;
+import ru.accounterio.telegram_bot.tele_core.bot.actions.StartAction;
+import ru.accounterio.telegram_bot.tele_core.bot.util.RuleSet;
 
 import java.time.Instant;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class ReceiptBot extends TelegramLongPollingBot {
     private final Logger logger = LoggerFactory.getLogger(ReceiptBot.class);
     private final String USERNAME = "accounterio_receipt_bot";
-    public static final String START = "/start";
-    public static final String NEW = "/new";
-    public static final String CONSULT =  "/consult";
-    public static final String ADVICE =  "/advice";
+    private final RuleSet ruleSet;
+    private final Map<String, String> bindingBy = new ConcurrentHashMap<>();
 
-    public ReceiptBot(@Value("${bot.token}") String botToken) {
+    @Autowired
+    public ReceiptBot(@Value("${bot.token}") String botToken, StartAction startAction, ConsultAction consultAction, PhotoAction photoAction, AdviceAction adviceAction) {
         super(botToken);
+        ruleSet = new RuleSet(Map.of(CommandSet.START, startAction, CommandSet.NEW, photoAction, CommandSet.CONSULT, consultAction, CommandSet.ADVICE, adviceAction));
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (!update.hasMessage() || !update.getMessage().hasText()) return;
-        var message = update.getMessage().getText();
-        var chatId = update.getMessage().getChatId();
-        var userName = update.getMessage().getChat().getUserName();
-        switch (message) {
-            case START -> startCommand(chatId, userName);
-            case NEW -> newCommand(chatId);
-            case CONSULT -> consultCommand(chatId);
-            case ADVICE -> adviceCommand(chatId);
-            default -> unknownCommand(chatId);
+        if (!update.hasMessage()) return;
+        var key = update.getMessage().getText();
+        var chatId = update.getMessage().getChatId().toString();
+        if (ruleSet.actions().containsKey(key)) {
+            var method = ruleSet.actions().get(key).handle(update);
+            bindingBy.put(chatId, key);
+            send(method);
+        } else if (bindingBy.containsKey(chatId)) {
+            var method = ruleSet.actions().get(bindingBy.get(chatId)).callback(update);
+            send(method);
         }
     }
 
@@ -44,32 +52,11 @@ public class ReceiptBot extends TelegramLongPollingBot {
         return USERNAME;
     }
 
-    private void sendMessage(Long chatId, String text) {
-        var message = new SendMessage(String.valueOf(chatId), text);
+    private void send(BotApiMethod method) {
         try {
-            execute(message);
+            execute(method);
         } catch (TelegramApiException e) {
             logger.error("Ошибка отправки сообщения {}", Instant.now().toString());
         }
-    }
-
-    private void startCommand(Long chatId, String userName) {
-        sendMessage(chatId, String.format(ReceiptBotShares.START_MESSAGE, userName));
-    }
-
-    private void newCommand(Long chatId) {
-        sendMessage(chatId, ReceiptBotShares.UNKNOWN_MESSAGE);
-    }
-
-    private void consultCommand(Long chatId) {
-        sendMessage(chatId, ReceiptBotShares.UNKNOWN_MESSAGE);
-    }
-
-    private void adviceCommand(Long chatId) {
-        sendMessage(chatId, ReceiptBotShares.UNKNOWN_MESSAGE);
-    }
-
-    private void unknownCommand(Long chatId) {
-        sendMessage(chatId, ReceiptBotShares.UNKNOWN_MESSAGE);
     }
 }
