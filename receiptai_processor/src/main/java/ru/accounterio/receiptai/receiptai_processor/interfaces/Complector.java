@@ -1,6 +1,7 @@
 package ru.accounterio.receiptai.receiptai_processor.interfaces;
 
 import ru.accounterio.receiptai.receiptai_processor.dto.RecognitionResult;
+import ru.accounterio.receiptai.receiptai_processor.interfaces.exceptions.ComplectionException;
 
 /**
  * Performer complectation of recognition result
@@ -13,5 +14,5 @@ public interface Complector<T> {
      * @param from object needs to complect
      * @return complected type
      */
-    T complect(RecognitionResult from);
+    T complect(RecognitionResult from) throws ComplectionException;
 }

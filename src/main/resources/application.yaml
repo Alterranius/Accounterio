@@ -24,3 +24,5 @@ camunda:
     admin-user:
       id: admin
       password: admin
+springdoc:
+  override-with-generic-response: false

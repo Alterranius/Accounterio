@@ -2,6 +2,7 @@ package ru.accounterio.receiptai.receiptai_processor.interfaces;
 
 import ru.accounterio.receiptai.receiptai_processor.dto.RecognitionResult;
 import ru.accounterio.receiptai.receiptai_processor.domains.Recognizable;
+import ru.accounterio.receiptai.receiptai_processor.interfaces.exceptions.RecognitionException;
 
 /**
  * Performer CV recognition
@@ -14,5 +15,5 @@ public interface Recognizer {
      * @param r recognition source
      * @return recognition result
      */
-    RecognitionResult recognize(Recognizable r);
+    RecognitionResult recognize(Recognizable r) throws RecognitionException;
 }

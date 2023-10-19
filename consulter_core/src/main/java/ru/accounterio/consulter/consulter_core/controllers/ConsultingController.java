@@ -32,7 +32,7 @@ public class ConsultingController {
         try {
             return consulter.consult(consulter.format(situation.getValue()));
         } catch (FormatException | ConsultationException fc) {
-            response.setStatus(500);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return Consultation.exceptionBody(fc);
         }
     }
@@ -45,7 +45,7 @@ public class ConsultingController {
         try {
             return consulter.advice(consulter.format(situation.getValue()));
         } catch (FormatException | ConsultationException fc) {
-            response.setStatus(500);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return Advice.exceptionBody(fc);
         }
     }

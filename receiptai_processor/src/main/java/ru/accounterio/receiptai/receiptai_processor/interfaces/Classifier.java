@@ -1,5 +1,7 @@
 package ru.accounterio.receiptai.receiptai_processor.interfaces;
 
+import ru.accounterio.receiptai.receiptai_processor.interfaces.exceptions.ClassificationException;
+
 /**
  * Performer classification task
  * @param <S> source
@@ -12,5 +14,5 @@ public interface Classifier<S, T> {
      * @param source object to classify
      * @return target type
      */
-    T classify(S source);
+    T classify(S source) throws ClassificationException;
 }
