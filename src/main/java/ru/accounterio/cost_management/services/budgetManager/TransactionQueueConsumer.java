@@ -50,11 +50,10 @@ public class TransactionQueueConsumer {
         return Position.builder()
                 .quantity(entry.getValue().value())
                 .price(entry.getKey().price())
-                .item(
-                        Item.builder()
-                                .name(entry.getKey().name())
-                                .category(categoryFromDto(entry.getKey().category(), user))
-                                .build()
+                .item(Item.builder()
+                        .name(entry.getKey().name())
+                        .category(categoryFromDto(entry.getKey().category(), user))
+                        .build()
                 )
                 .build();
     }

@@ -7,7 +7,6 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import ru.accounterio.cost_management.domains.User;
 import ru.accounterio.cost_management.interfaces.user.UserService;
-import ru.accounterio.cost_management.interfaces.user.UserServiceException;
 import ru.accounterio.cost_management.repositories.postgres.UserRepository;
 
 import java.util.Optional;

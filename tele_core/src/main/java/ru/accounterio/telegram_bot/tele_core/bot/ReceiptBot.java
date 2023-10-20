@@ -8,16 +8,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.accounterio.telegram_bot.tele_core.bot.actions.AdviceAction;
 import ru.accounterio.telegram_bot.tele_core.bot.actions.ConsultAction;
 import ru.accounterio.telegram_bot.tele_core.bot.actions.PhotoAction;
 import ru.accounterio.telegram_bot.tele_core.bot.actions.StartAction;
+import ru.accounterio.telegram_bot.tele_core.bot.tasks.Task;
 import ru.accounterio.telegram_bot.tele_core.bot.util.RuleSet;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -37,7 +40,7 @@ public class ReceiptBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (!update.hasMessage()) return;
         var key = update.getMessage().getText();
-        var chatId = update.getMessage().getChatId().toString();
+        String chatId = update.getMessage().getChatId().toString();
         if (ruleSet.actions().containsKey(key)) {
             var method = ruleSet.actions().get(key).handle(update);
             bindingBy.put(chatId, key);
@@ -62,7 +65,8 @@ public class ReceiptBot extends TelegramLongPollingBot {
     }
 
     @RabbitListener(queues = {"bot-task-queue"})
-    public void consume() {
-
+    public void consumeTasks(Task task) {
+        Optional<Map.Entry<String, String>> message = task.extract();
+        message.ifPresent(m -> send(new SendMessage(m.getKey(), m.getValue())));
     }
 }
