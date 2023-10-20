@@ -1,4 +1,4 @@
-package ru.accounterio.receiptai.receiptai_processor.interfaces;
+package ru.accounterio.receiptai.receiptai_processor.interfaces.util;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 

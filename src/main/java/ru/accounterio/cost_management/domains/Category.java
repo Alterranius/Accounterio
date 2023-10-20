@@ -27,6 +27,6 @@ public class Category {
     private User user;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private Set<Transaction> transactions;
+    private Set<Item> items;
 
 }

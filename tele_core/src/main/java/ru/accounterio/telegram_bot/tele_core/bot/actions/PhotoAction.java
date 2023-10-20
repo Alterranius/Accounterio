@@ -7,6 +7,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.accounterio.telegram_bot.tele_core.bot.AccounterioClient;
 import ru.accounterio.telegram_bot.tele_core.bot.ReceiptBotShares;
+import ru.accounterio.telegram_bot.tele_core.bot.exceptions.CoreServiceException;
+import ru.accounterio.telegram_bot.tele_core.bot.exceptions.DownloadException;
 import ru.accounterio.telegram_bot.tele_core.bot.interfaces.Action;
 import ru.accounterio.telegram_bot.tele_core.bot.util.MessageHandler;
 
@@ -31,6 +33,12 @@ public class PhotoAction implements Action {
         if (!update.getMessage().hasPhoto())
             return new SendMessage(update.getMessage().getChatId().toString(), ReceiptBotShares.WRONG_PHOTO);
 
-        return new SendMessage(update.getMessage().getChatId().toString(), handleServerCode(client.askReceiptProcessing(messageHandler.handlePhoto(update.getMessage()))));
+        String answer = null;
+        try {
+            answer = handleServerCode(client.askReceiptProcessing(messageHandler.handlePhoto(update.getMessage())));
+        } catch (CoreServiceException | DownloadException e) {
+            answer = e.getMessage();
+        }
+        return new SendMessage(update.getMessage().getChatId().toString(), answer);
     }
 }

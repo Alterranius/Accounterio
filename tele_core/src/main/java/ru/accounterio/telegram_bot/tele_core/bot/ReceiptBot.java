@@ -2,6 +2,7 @@ package ru.accounterio.telegram_bot.tele_core.bot;
 
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -58,5 +59,10 @@ public class ReceiptBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             logger.error("Ошибка отправки сообщения {}", Instant.now().toString());
         }
+    }
+
+    @RabbitListener(queues = {"bot-task-queue"})
+    public void consume() {
+
     }
 }

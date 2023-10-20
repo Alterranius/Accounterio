@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.accounterio.telegram_bot.tele_core.bot.AccounterioClient;
+import ru.accounterio.telegram_bot.tele_core.bot.exceptions.CoreServiceException;
 import ru.accounterio.telegram_bot.tele_core.bot.interfaces.Action;
 
 @Component
@@ -19,10 +20,13 @@ public class ConsultAction implements Action {
 
     @Override
     public BotApiMethod handle(Update update) {
-        return new SendMessage(
-                update.getMessage().getChatId().toString(),
-                handleServerCode(client.askConsultProcessing(update.getMessage().getChatId()))
-        );
+        String answer = null;
+        try {
+            answer = handleServerCode(client.askConsultProcessing(update.getMessage().getChatId()));
+        } catch (CoreServiceException e) {
+            answer = e.getMessage();
+        }
+        return new SendMessage(update.getMessage().getChatId().toString(), answer);
     }
 
     @Override

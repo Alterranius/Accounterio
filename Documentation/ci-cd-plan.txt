@@ -1,0 +1,6 @@
+1. ALL Services unit test
+2. ALL Services test containers
+3. ALL Services integration test in containers
+4. Compose containers
+5. Delivery
+6. Deploy

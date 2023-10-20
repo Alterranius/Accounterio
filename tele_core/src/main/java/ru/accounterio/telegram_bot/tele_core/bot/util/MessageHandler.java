@@ -3,6 +3,7 @@ package ru.accounterio.telegram_bot.tele_core.bot.util;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import ru.accounterio.telegram_bot.tele_core.bot.exceptions.DownloadException;
 import ru.accounterio.telegram_bot.tele_core.dto.ReceiptImage;
 
 import java.io.BufferedInputStream;
@@ -17,7 +18,7 @@ public class MessageHandler {
     private String fileStorageUri;
     @Value("${bot.token}")
     private String botToken;
-    public ReceiptImage handlePhoto(Message message) {
+    public ReceiptImage handlePhoto(Message message) throws DownloadException {
         return new ReceiptImage(
                 message.getChatId(),
                 Instant.now(),
@@ -25,7 +26,7 @@ public class MessageHandler {
         );
     }
 
-    private byte[] download(String filePath) {
+    private byte[] download(String filePath) throws DownloadException {
         URL url = null;
         try {
             url = new URL(
@@ -38,7 +39,7 @@ public class MessageHandler {
         try (BufferedInputStream is = new BufferedInputStream(url.openStream())) {
             return is.readAllBytes();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DownloadException(e);
         }
     }
 }

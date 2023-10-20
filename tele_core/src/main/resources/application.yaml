@@ -1,3 +1,10 @@
+spring:
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: admin
+    port: 5672
+
 bot:
   token: 6295352509:AAG9eHnt2oZD16YwldHgB217xLkHue36YNQ
   uri: "https://api.telegram.org/file/bot{token}/{filePath}"

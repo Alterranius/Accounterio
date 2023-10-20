@@ -1,4 +1,4 @@
-package ru.accounterio.receiptai.receiptai_processor.interfaces;
+package ru.accounterio.receiptai.receiptai_processor.interfaces.util;
 
 import ru.accounterio.receiptai.receiptai_processor.dto.RecognitionResult;
 import ru.accounterio.receiptai.receiptai_processor.domains.Recognizable;

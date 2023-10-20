@@ -32,4 +32,5 @@ public class ReceiptBotShares {
     public static final String ASK_IMAGE_MESSAGE = """
             Отправьте фотографию чека
             """;
+    public static final String DOWNLOAD_ERROR_MESSAGE = "Сервис не смог загрузить фотографию(";
 }

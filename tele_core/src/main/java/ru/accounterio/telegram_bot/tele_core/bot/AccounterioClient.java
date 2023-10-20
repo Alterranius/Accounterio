@@ -6,9 +6,9 @@ import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.accounterio.telegram_bot.tele_core.bot.exceptions.CoreServiceException;
 import ru.accounterio.telegram_bot.tele_core.dto.ReceiptImage;
 
-import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -26,7 +26,7 @@ public class AccounterioClient {
         this.client = client;
     }
 
-    public int askReceiptProcessing(ReceiptImage receiptImage) {
+    public int askReceiptProcessing(ReceiptImage receiptImage) throws CoreServiceException {
         var request = new Request.Builder()
                 .url(url + ASK_RECEIPT)
                 .post(new FormBody.Builder()
@@ -38,29 +38,29 @@ public class AccounterioClient {
         try (var response = client.newCall(request).execute()) {
             return response.code();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CoreServiceException(e);
         }
     }
 
-    public int askConsultProcessing(Long chatId) {
+    public int askConsultProcessing(Long chatId) throws CoreServiceException {
         var request = new Request.Builder()
                 .url(url + String.format(ASK_CONSULT, chatId))
                 .build();
         try (var response = client.newCall(request).execute()) {
             return response.code();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CoreServiceException(e);
         }
     }
 
-    public int askAdviceProcessing(Long chatId) {
+    public int askAdviceProcessing(Long chatId) throws CoreServiceException {
         var request = new Request.Builder()
                 .url(url + String.format(ASK_ADVICE, chatId))
                 .build();
         try (var response = client.newCall(request).execute()) {
             return response.code();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CoreServiceException(e);
         }
     }
 }

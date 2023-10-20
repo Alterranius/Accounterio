@@ -1,0 +1,18 @@
+package ru.accounterio.cost_management.interfaces;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
+public abstract class RabbitProducer<T> {
+    protected final String exchange = "accouterio-core-exchange";
+    protected final String routingKey;
+    private final RabbitTemplate rabbitTemplate;
+
+    protected RabbitProducer(String routingKey, RabbitTemplate rabbitTemplate) {
+        this.routingKey = routingKey;
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    public void sendMessage(T message) {
+        rabbitTemplate.convertAndSend(exchange, routingKey, message);
+    }
+}

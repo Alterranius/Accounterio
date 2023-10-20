@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.accounterio.cost_management.services.orchestrators.ReceiptAIProcessorOrchestrator;
+import ru.accounterio.cost_management.interfaces.orchestrators.ReceiptAIProcessorOrchestrator;
 
 @RestController
 @RequestMapping("/api/v1/processor")
@@ -21,6 +21,7 @@ public class ReceiptAIProcessorController {
     public ReceiptAIProcessorController(ReceiptAIProcessorOrchestrator processorOrchestrator) {
         this.processorOrchestrator = processorOrchestrator;
     }
+
 
     @Operation(summary = "Notify about Receipt processing status")
     @GetMapping("/receipt/{user_id}")
