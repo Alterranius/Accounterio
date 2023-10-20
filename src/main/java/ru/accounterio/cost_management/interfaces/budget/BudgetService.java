@@ -15,7 +15,5 @@ public interface BudgetService {
     Long addTransaction(Transaction transaction) throws BudgetServiceException;
     void deleteTransaction(Long id) throws BudgetServiceException;
     void updateTransactionValue(Long id, double value) throws BudgetServiceException;
-    void updateTransactionCategory(Long transId, int categoryId) throws BudgetServiceException;
     Set<Category> getCategories(Long userId) throws BudgetServiceException;
-
 }

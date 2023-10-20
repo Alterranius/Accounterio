@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "transaction")
@@ -28,12 +29,15 @@ public class Transaction implements Comparable<Transaction> {
     private LocalDateTime stamp;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
-
-    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
+    private Supplier supplier;
+
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
+    private Set<Position> positions;
 
     public boolean isExpense() {
         return value < 0d;

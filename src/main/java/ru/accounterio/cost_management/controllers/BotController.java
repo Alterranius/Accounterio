@@ -8,16 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.accounterio.cost_management.dto.ReceiptImage;
 import ru.accounterio.cost_management.services.orchestrators.BotOrchestrator;
+import ru.accounterio.cost_management.services.orchestrators.ConsultingOrchestrator;
 
 @RestController
 @RequestMapping("/api/v1/bot")
 @Tag(name = "Telegram Bot internal API", description = "Used as TelegramBot gates")
 public class BotController {
     private final BotOrchestrator botOrchestrator;
+    private final ConsultingOrchestrator consultingOrchestrator;
 
     @Autowired
-    public BotController(BotOrchestrator botOrchestrator) {
+    public BotController(BotOrchestrator botOrchestrator, ConsultingOrchestrator consultingOrchestrator) {
         this.botOrchestrator = botOrchestrator;
+        this.consultingOrchestrator = consultingOrchestrator;
     }
 
     @Operation(summary = "Ask for Receipt processing")

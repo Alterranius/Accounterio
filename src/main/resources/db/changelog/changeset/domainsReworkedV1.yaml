@@ -1,0 +1,91 @@
+databaseChangeLog:
+  - changeSet:
+      id: domainsReworked
+      author: Alterranius
+      changes:
+        - createTable:
+            tableName: item
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_item_category
+
+        - createTable:
+            tableName: position
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: item_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_position_item
+              - column:
+                  name: transaction_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_position_transaction
+
+        - createTable:
+            tableName: supplier
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+
+        - dropForeignKeyConstraint:
+            constraintName: fk_transaction_category
+            baseTableName: transaction
+        - dropColumn:
+            tableName: transaction
+            columnName: category_id
+        - addColumn:
+            tableName: transaction
+            columns:
+              - column:
+                  name: supplier_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_transaction_supplier

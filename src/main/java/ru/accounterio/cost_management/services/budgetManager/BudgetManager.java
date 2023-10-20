@@ -67,17 +67,6 @@ public class BudgetManager implements BudgetService {
     }
 
     @Override
-    public void updateTransactionCategory(Long transId, int categoryId) {
-        transactionRepository.findById(transId).ifPresent(trans -> {
-            categoryRepository.findById(categoryId).ifPresent(cat -> {
-                trans.setCategory(cat);
-                cat.getTransactions().add(trans);
-            });
-            transactionRepository.save(trans);
-        });
-    }
-
-    @Override
     public Set<Category> getCategories(Long userId) {
         return categoryRepository.findCategoriesByUser_Id(userId);
     }
