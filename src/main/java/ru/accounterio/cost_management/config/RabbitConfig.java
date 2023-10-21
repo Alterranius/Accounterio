@@ -15,9 +15,11 @@ public class RabbitConfig {
     public static final String transactionQueueName = "transaction-queue";
     public static final String receiptAITasksQueueName = "receipt-task-queue";
     public static final String botTasksQueueName = "bot-task-queue";
+    public static final String consultantTasksQueueName = "consultant-queue";
     public static final String transactionReceiptAIRoutingKey = "costmanagement.tasks.1.0.costchannel";
     public static final String receiptAITasksRoutingKey = "costmanagement.tasks.1.0.receiptchannel";
     public static final String botTasksRoutingKey = "costmanagement.tasks.1.0.botchannel";
+    public static final String consultantTasksRoutingKey = "costmanagement.tasks.1.0.consultantchanel";
 
     @Bean
     Queue transactionQueue() {
@@ -32,6 +34,11 @@ public class RabbitConfig {
     @Bean
     Queue botTasksQueue() {
         return new Queue(botTasksQueueName, false);
+    }
+
+    @Bean
+    Queue consultantTasksQueue() {
+        return new Queue(consultantTasksQueueName, false);
     }
 
     @Bean
@@ -52,6 +59,11 @@ public class RabbitConfig {
     @Bean
     Binding botTasksQueueBinding(@Qualifier("botTasksQueue") Queue queue, TopicExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with(botTasksRoutingKey);
+    }
+
+    @Bean
+    Binding consultantTasksQueueBinding(@Qualifier("consultantTasksQueue") Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(consultantTasksRoutingKey);
     }
 
     @Bean

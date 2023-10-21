@@ -1,1 +1,9 @@
+spring:
+  rabbitmq:
+    host: localhost
+    username: admin
+    password: admin
+    port: 5672
 
+accounterio:
+  url: "https://localhost:8080/api/v1/processor"

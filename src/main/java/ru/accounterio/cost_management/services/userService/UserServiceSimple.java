@@ -28,8 +28,6 @@ public class UserServiceSimple implements UserService {
         return false;
     }
 
-
-
     @Override
     public void deleteUser(Long userId) {
         userRepository.findById(userId).ifPresent(userRepository::delete);

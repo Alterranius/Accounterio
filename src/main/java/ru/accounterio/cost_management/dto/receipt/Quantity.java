@@ -1,4 +1,6 @@
 package ru.accounterio.cost_management.dto.receipt;
 
-public record Quantity(int value) {
+import java.io.Serializable;
+
+public record Quantity(int value) implements Serializable {
 }

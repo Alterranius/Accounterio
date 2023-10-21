@@ -33,7 +33,7 @@ public class ConsultingController {
             return consulter.consult(consulter.format(situation.getValue()));
         } catch (FormatException | ConsultationException fc) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return Consultation.exceptionBody(fc);
+            return Consultation.exceptionBody(situation.getValue().getUserId(), fc);
         }
     }
 
@@ -46,7 +46,7 @@ public class ConsultingController {
             return consulter.advice(consulter.format(situation.getValue()));
         } catch (FormatException | ConsultationException fc) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return Advice.exceptionBody(fc);
+            return Advice.exceptionBody(situation.getValue().getUserId(), fc);
         }
     }
 }

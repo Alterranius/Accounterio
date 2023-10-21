@@ -1,6 +1,8 @@
 package ru.accounterio.cost_management.dto.receipt;
 
-public enum PaymentMethod {
+import java.io.Serializable;
+
+public enum PaymentMethod implements Serializable {
     CASH,
     DEBIT_CARD,
     CREDIT_CARD,

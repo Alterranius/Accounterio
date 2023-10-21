@@ -4,4 +4,5 @@ import ru.accounterio.cost_management.dto.ReceiptImage;
 
 public interface ReceiptAIProcessorOrchestrator {
     void orchestrateAddReceiptBP(ReceiptImage receiptImage) throws OrchestrationException;
+    void orchestrateEndReceiptBP(Long userId) throws OrchestrationException;
 }

@@ -1,4 +1,6 @@
 package ru.accounterio.cost_management.dto.receipt;
 
-public record Category(String name) {
+import java.io.Serializable;
+
+public record Category(String name) implements Serializable {
 }
