@@ -35,7 +35,7 @@ jobs:
         run: docker system prune -a -f
       - name: checkout
         uses: actions/checkout@v3
-      - name: compose Testcontainers
+      - name: compose
         run: docker-compose up -d
 
   deployment:
