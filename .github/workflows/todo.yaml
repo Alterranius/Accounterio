@@ -36,7 +36,7 @@ jobs:
       - name: Clear data
         run: docker system prune -a -f
       - name: compose
-        run: docker compose up -d
+        run: docker compose docker/test/compose.yaml up -d
 
   deployment:
     runs-on: self-hosted
