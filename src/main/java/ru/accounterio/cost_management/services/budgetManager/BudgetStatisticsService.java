@@ -32,9 +32,9 @@ public class BudgetStatisticsService implements StatisticsService {
         for (LocalDate date = userTransactions.peek().getStamp().toLocalDate(); date.isBefore(LocalDate.now()); date = dateIncrement(date, period)) {
             double income = 0d;
             double expense = 0d;
-            while (userTransactions.peek().getStamp().toLocalDate().equals(date)) {
+            while (!userTransactions.isEmpty() && userTransactions.peek().getStamp().toLocalDate().equals(date)) {
                 Transaction transaction = userTransactions.poll();
-                if (transaction.isExpense()) {
+                if (transaction.isIncome()) {
                     income += transaction.getValue();
                 } else {
                     expense += transaction.getValue();
@@ -46,6 +46,7 @@ public class BudgetStatisticsService implements StatisticsService {
     }
 
     private LocalDate dateIncrement(LocalDate date, Periods period) {
+        if (period == null) period = Periods.DAILY;
         return switch (period) {
             case WEEKLY -> date.plusWeeks(1);
             case MONTHLY -> date.plusMonths(1);

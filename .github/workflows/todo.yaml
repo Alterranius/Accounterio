@@ -9,9 +9,6 @@ on:
       - 'master'
 
 jobs:
-  checkList:
-    runs-on: self-hosted
-
   test:
     runs-on: ubuntu-latest
     needs: checkList

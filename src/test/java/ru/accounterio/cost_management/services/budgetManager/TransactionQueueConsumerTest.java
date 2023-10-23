@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {AccounterioCoreTestContainers.class})
 @RunWith(MockitoJUnitRunner.class)
-class TransactionQueueConsumerTest {
+public class TransactionQueueConsumerTest {
     @InjectMocks
     private TransactionQueueConsumer transactionQueueConsumer;
 

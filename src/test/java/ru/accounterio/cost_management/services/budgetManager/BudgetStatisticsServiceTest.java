@@ -1,7 +1,7 @@
 package ru.accounterio.cost_management.services.budgetManager;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,16 +15,15 @@ import ru.accounterio.cost_management.repositories.postgres.TransactionRepositor
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
-class BudgetStatisticsServiceTest {
+public class BudgetStatisticsServiceTest {
     @Mock
     private TransactionRepository transactionRepository;
     @InjectMocks
@@ -60,7 +59,7 @@ class BudgetStatisticsServiceTest {
         assertTrue(budgetStatisticsService.getPeriodic(Periods.DAILY, 0L).isEmpty());
     }
 
-    @BeforeAll
+    @Before
     public void prepareMock() {
         Mockito.when(transactionRepository.findTransactionsByUser_Id(0L)).thenReturn(BudgetStatisticsServiceTest.transactions);
     }
@@ -72,12 +71,18 @@ class BudgetStatisticsServiceTest {
         await.put(LocalDate.parse("2023-05-07"), new Balance(0d, -9000d, -9000d));
         await.put(LocalDate.parse("2023-05-08"), new Balance(6500d, -1500d, 5000d));
         await.put(LocalDate.parse("2023-05-09"), new Balance(8200d, -9600d, -1400d));
-        await.put(LocalDate.parse("2023-05-10"), new Balance(1500d, -3000d, 1500d));
+        await.put(LocalDate.parse("2023-05-10"), new Balance(1500d, -3000d, -1500d));
         await.put(LocalDate.parse("2023-05-11"), new Balance(6000d, 0d, 6000d));
         await.put(LocalDate.parse("2023-05-12"), new Balance(0d, -8000d, -8000d));
         await.put(LocalDate.parse("2023-05-13"), new Balance(0d, -7000d, -7000d));
         await.put(LocalDate.parse("2023-05-14"), new Balance(0d, -500d, -500d));
         await.put(LocalDate.parse("2023-05-15"), new Balance(300d, 0d, 300d));
+        await.putAll(
+                Stream.iterate(
+                        Map.entry(LocalDate.parse("2023-05-16"), new Balance(0d, 0d, 0d)), t -> t.getKey().isBefore(LocalDate.now()),
+                        t -> Map.entry(t.getKey().plusDays(1), new Balance(0d, 0d, 0d)))
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+
         assertEquals(await, budgetStatisticsService.getPeriodic(Periods.DAILY, 0L));
     }
 
@@ -96,12 +101,18 @@ class BudgetStatisticsServiceTest {
         await.put(LocalDate.parse("2023-05-07"), new Balance(0d, -9000d, -9000d));
         await.put(LocalDate.parse("2023-05-08"), new Balance(6500d, -1500d, 5000d));
         await.put(LocalDate.parse("2023-05-09"), new Balance(8200d, -9600d, -1400d));
-        await.put(LocalDate.parse("2023-05-10"), new Balance(1500d, -3000d, 1500d));
+        await.put(LocalDate.parse("2023-05-10"), new Balance(1500d, -3000d, -1500d));
         await.put(LocalDate.parse("2023-05-11"), new Balance(6000d, 0d, 6000d));
         await.put(LocalDate.parse("2023-05-12"), new Balance(0d, -8000d, -8000d));
         await.put(LocalDate.parse("2023-05-13"), new Balance(0d, -7000d, -7000d));
         await.put(LocalDate.parse("2023-05-14"), new Balance(0d, -500d, -500d));
         await.put(LocalDate.parse("2023-05-15"), new Balance(300d, 0d, 300d));
+        await.putAll(
+                Stream.iterate(
+                                Map.entry(LocalDate.parse("2023-05-16"), new Balance(0d, 0d, 0d)), t -> t.getKey().isBefore(LocalDate.now()),
+                                t -> Map.entry(t.getKey().plusDays(1), new Balance(0d, 0d, 0d)))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+
         assertEquals(await, budgetStatisticsService.getPeriodic(null, 0L));
     }
 }
