@@ -3,6 +3,16 @@ spring:
     init:
       mode: always
 
+  datasource:
+    url: jdbc:h2:file:./receiptAI-h2-database
+    username: u
+    password: 1
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+
   rabbitmq:
     host: localhost:8080
     username: admin

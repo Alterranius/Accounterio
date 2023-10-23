@@ -23,18 +23,19 @@ public class UserController {
     @Operation(summary = "New User registration")
     @PostMapping("/new")
     public ResponseEntity<HttpStatus> performRegistration(@RequestBody User user) {
-
+        return ResponseEntity.ok(HttpStatus.OK);
+        // TODO: 23.10.2023 Security
     }
 
     @Operation(summary = "User Login perform")
     @PostMapping("/login")
     public ResponseEntity<HttpStatus> performLogin(@RequestBody User user) {
-
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @Operation(summary = "Delete User")
     @DeleteMapping("/delete/{user_id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("user_id") Long userId) {
-
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

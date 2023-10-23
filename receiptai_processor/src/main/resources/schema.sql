@@ -1,5 +1,4 @@
-CREATE TABLE category
-(
-    id   INT PRIMARY KEY NOT NULL,
-    name VARCHAR(100)    NOT NULL
-)
+CREATE TABLE IF NOT EXISTS `Category` (
+    `id`   INTEGER  PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL
+);
