@@ -1,0 +1,63 @@
+name: Accounter.io
+run-name: Accounter.io pipeline
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - 'master'
+
+#env:
+#  POSTGRES_HOST: ${{ test-env.POSTGRES_HOST }}
+#  POSTGRES_DB: ${{ test-env.POSTGRES_DB }}
+#  POSTGRES_USER: ${{ test-env.POSTGRES_USER }}
+#  POSTGRES_PASSWORD: ${{ test-env.POSTGRES_PASSWORD }}
+#  POSTGRES_PORT: ${{ test-env.POSTGRES_PORT }}
+
+jobs:
+  checkList:
+    runs-on: self-hosted
+
+  test:
+    runs-on: ubuntu-latest
+    needs: checkList
+    environment: test-env
+    steps:
+      - name: init
+        uses: actions/checkout@v3
+      - name: set Up Java and Maven
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          cache: maven
+      - name: run tests
+        run: mvn test
+
+  integrationTest:
+    runs-on: self-hosted
+    needs: test
+    environment: test-env
+    steps:
+      - name: Stop containers
+        run: docker-compose stop
+      - name: Clear data
+        run: docker system prune -a -f
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: compose Testcontainers
+        run: docker-compose up -d
+
+  deployment:
+    runs-on: self-hosted
+    needs: test
+    environment: test-env
+    steps:
+      - name: Stop containers
+        run: docker-compose stop
+      - name: Clear data
+        run: docker system prune
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: compose
+        run: docker-compose up -d

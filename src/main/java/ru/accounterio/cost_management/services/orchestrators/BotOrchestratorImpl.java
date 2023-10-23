@@ -11,7 +11,7 @@ public class BotOrchestratorImpl implements BotOrchestrator {
 
     @Override
     public void orchestrateEndReceiptBP(Long id) throws OrchestrationException {
-
+        // TODO: 21.10.2023 impl Bot Orchestra
     }
 
     @Override

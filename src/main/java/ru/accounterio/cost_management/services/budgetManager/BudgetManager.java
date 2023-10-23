@@ -6,14 +6,17 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 import ru.accounterio.cost_management.domains.Category;
+import ru.accounterio.cost_management.domains.Supplier;
 import ru.accounterio.cost_management.domains.Transaction;
 import ru.accounterio.cost_management.dto.Budget;
 import ru.accounterio.cost_management.dto.TransactionChain;
 import ru.accounterio.cost_management.interfaces.budget.BudgetService;
 import ru.accounterio.cost_management.repositories.postgres.CategoryRepository;
+import ru.accounterio.cost_management.repositories.postgres.SupplierRepository;
 import ru.accounterio.cost_management.repositories.postgres.TransactionRepository;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -25,6 +28,7 @@ import java.util.stream.Collectors;
 public class BudgetManager implements BudgetService {
     TransactionRepository transactionRepository;
     CategoryRepository categoryRepository;
+    SupplierRepository supplierRepository;
 
     @Override
     public Budget getBudget(Long userId) {
@@ -69,5 +73,15 @@ public class BudgetManager implements BudgetService {
     @Override
     public Set<Category> getCategories(Long userId) {
         return categoryRepository.findCategoriesByUser_Id(userId);
+    }
+
+    @Override
+    public Optional<Category> getCategoryByUserIdAndName(Long userId, String name) {
+        return categoryRepository.findCategoryByUser_IdAndName(userId, name);
+    }
+
+    @Override
+    public Optional<Supplier> getSupplierByName(String name) {
+        return supplierRepository.findSupplierByName(name);
     }
 }

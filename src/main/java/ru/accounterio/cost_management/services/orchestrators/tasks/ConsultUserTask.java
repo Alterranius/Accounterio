@@ -1,8 +1,8 @@
 package ru.accounterio.cost_management.services.orchestrators.tasks;
 
-import ru.accounterio.cost_management.dto.Consultation;
+import ru.accounterio.cost_management.dto.Situation;
 
 import java.io.Serializable;
 
-public record ConsultUserTask(Consultation input, String command) implements Serializable, Task<Consultation> {
+public record ConsultUserTask(Situation input, String command) implements Serializable, Task<Situation> {
 }

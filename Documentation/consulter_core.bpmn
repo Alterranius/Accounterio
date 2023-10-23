@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_04v04po" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.16.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <bpmn:collaboration id="Collaboration_1uhhu0q">
+    <bpmn:participant id="p__consulter_core_advice" name="Сформировать совет" processRef="consulter_core_advice" />
+    <bpmn:participant id="p__consulter_core_consult" name="Сформировать консультацию" processRef="consulter_core_consult" />
+  </bpmn:collaboration>
+  <bpmn:process id="consulter_core_advice" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="SE_consulter_core_advice">
+      <bpmn:outgoing>Flow_0gt2lmw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="advice_format" name="Отформатировать запрос">
+      <bpmn:incoming>Flow_0gt2lmw</bpmn:incoming>
+      <bpmn:outgoing>Flow_16r7f4a</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="advice_advice" name="Сгенерировать совет">
+      <bpmn:incoming>Flow_16r7f4a</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nxm9xu</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="advice_send" name="Отправить совет в бот">
+      <bpmn:incoming>Flow_1nxm9xu</bpmn:incoming>
+      <bpmn:outgoing>Flow_0l6vud5</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:serviceTask id="advice_note" name="Оповестить об успешном выполнении">
+      <bpmn:incoming>Flow_0l6vud5</bpmn:incoming>
+      <bpmn:outgoing>Flow_05kx0ve</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EE_consulter_core_advice_success">
+      <bpmn:incoming>Flow_05kx0ve</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EE_consulter_core_advice_failFormat">
+      <bpmn:incoming>Flow_1srsogc</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EE_consulter_core_advice_failAI">
+      <bpmn:incoming>Flow_1aa9a49</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:boundaryEvent id="Event_0960029" attachedToRef="advice_format">
+      <bpmn:outgoing>Flow_1srsogc</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_075pzru" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_0w3k7z5" attachedToRef="advice_advice">
+      <bpmn:outgoing>Flow_1aa9a49</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0gq48si" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_0gt2lmw" sourceRef="SE_consulter_core_advice" targetRef="advice_format" />
+    <bpmn:sequenceFlow id="Flow_16r7f4a" sourceRef="advice_format" targetRef="advice_advice" />
+    <bpmn:sequenceFlow id="Flow_1nxm9xu" sourceRef="advice_advice" targetRef="advice_send" />
+    <bpmn:sequenceFlow id="Flow_0l6vud5" sourceRef="advice_send" targetRef="advice_note" />
+    <bpmn:sequenceFlow id="Flow_05kx0ve" sourceRef="advice_note" targetRef="EE_consulter_core_advice_success" />
+    <bpmn:sequenceFlow id="Flow_1srsogc" name="Исключение форматирования" sourceRef="Event_0960029" targetRef="EE_consulter_core_advice_failFormat" />
+    <bpmn:sequenceFlow id="Flow_1aa9a49" name="Исключение консультирующего ИИ" sourceRef="Event_0w3k7z5" targetRef="EE_consulter_core_advice_failAI" />
+  </bpmn:process>
+  <bpmn:process id="consulter_core_consult" isExecutable="true">
+    <bpmn:startEvent id="Event_0nf9xf1">
+      <bpmn:outgoing>SE_consulter_core_consult</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="consult_format" name="Отформатировать запрос">
+      <bpmn:incoming>SE_consulter_core_consult</bpmn:incoming>
+      <bpmn:outgoing>Flow_1hlrz5e</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="consult_consult" name="Сгенерировать консультацию">
+      <bpmn:incoming>Flow_1hlrz5e</bpmn:incoming>
+      <bpmn:outgoing>Flow_1akuh9y</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="consult_send" name="Отправить консультацию в бот">
+      <bpmn:incoming>Flow_1akuh9y</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qipazj</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:serviceTask id="consult_note" name="Оповестить об успешном выполнении">
+      <bpmn:incoming>Flow_0qipazj</bpmn:incoming>
+      <bpmn:outgoing>Flow_09qm8oq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EE_consulter_core_consult_success">
+      <bpmn:incoming>Flow_09qm8oq</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EE_consulter_core_consult_failAI">
+      <bpmn:incoming>Flow_1dcj3sl</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EE_consulter_core_consult_failFormat">
+      <bpmn:incoming>Flow_1wy1h5a</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:boundaryEvent id="Event_1w7j284" attachedToRef="consult_format">
+      <bpmn:outgoing>Flow_1wy1h5a</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0swdnsa" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_0kr91s1" attachedToRef="consult_consult">
+      <bpmn:outgoing>Flow_1dcj3sl</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0c126nv" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="SE_consulter_core_consult" sourceRef="Event_0nf9xf1" targetRef="consult_format" />
+    <bpmn:sequenceFlow id="Flow_1hlrz5e" sourceRef="consult_format" targetRef="consult_consult" />
+    <bpmn:sequenceFlow id="Flow_1akuh9y" sourceRef="consult_consult" targetRef="consult_send" />
+    <bpmn:sequenceFlow id="Flow_0qipazj" sourceRef="consult_send" targetRef="consult_note" />
+    <bpmn:sequenceFlow id="Flow_09qm8oq" sourceRef="consult_note" targetRef="EE_consulter_core_consult_success" />
+    <bpmn:sequenceFlow id="Flow_1dcj3sl" name="Исключение консультирующего ИИ" sourceRef="Event_0kr91s1" targetRef="EE_consulter_core_consult_failAI" />
+    <bpmn:sequenceFlow id="Flow_1wy1h5a" name="Исключение форматирования" sourceRef="Event_1w7j284" targetRef="EE_consulter_core_consult_failFormat" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1uhhu0q">
+      <bpmndi:BPMNShape id="Participant_09ke0dt_di" bpmnElement="p__consulter_core_advice" isHorizontal="true">
+        <dc:Bounds x="180" y="80" width="840" height="410" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02tbp8s_di" bpmnElement="SE_consulter_core_advice">
+        <dc:Bounds x="232" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ohduoj_di" bpmnElement="advice_format">
+        <dc:Bounds x="320" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0drab61_di" bpmnElement="advice_advice">
+        <dc:Bounds x="480" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10r3dmu_di" bpmnElement="advice_send">
+        <dc:Bounds x="640" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ul8con_di" bpmnElement="advice_note">
+        <dc:Bounds x="800" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_00jugwv_di" bpmnElement="EE_consulter_core_advice_success">
+        <dc:Bounds x="962" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0auaniq_di" bpmnElement="EE_consulter_core_advice_failFormat">
+        <dc:Bounds x="962" y="402" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0z9p2wz_di" bpmnElement="EE_consulter_core_advice_failAI">
+        <dc:Bounds x="962" y="322" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_10f2kkk_di" bpmnElement="Event_0960029">
+        <dc:Bounds x="332" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1veveya_di" bpmnElement="Event_0w3k7z5">
+        <dc:Bounds x="492" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0gt2lmw_di" bpmnElement="Flow_0gt2lmw">
+        <di:waypoint x="268" y="170" />
+        <di:waypoint x="320" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16r7f4a_di" bpmnElement="Flow_16r7f4a">
+        <di:waypoint x="420" y="170" />
+        <di:waypoint x="480" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nxm9xu_di" bpmnElement="Flow_1nxm9xu">
+        <di:waypoint x="580" y="170" />
+        <di:waypoint x="640" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0l6vud5_di" bpmnElement="Flow_0l6vud5">
+        <di:waypoint x="740" y="170" />
+        <di:waypoint x="800" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05kx0ve_di" bpmnElement="Flow_05kx0ve">
+        <di:waypoint x="900" y="170" />
+        <di:waypoint x="962" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1srsogc_di" bpmnElement="Flow_1srsogc">
+        <di:waypoint x="350" y="228" />
+        <di:waypoint x="350" y="420" />
+        <di:waypoint x="962" y="420" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="506" y="386" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1aa9a49_di" bpmnElement="Flow_1aa9a49">
+        <di:waypoint x="510" y="228" />
+        <di:waypoint x="510" y="340" />
+        <di:waypoint x="962" y="340" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="527" y="290" width="86" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_11tnu3p_di" bpmnElement="p__consulter_core_consult" isHorizontal="true">
+        <dc:Bounds x="180" y="700" width="840" height="340" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nf9xf1_di" bpmnElement="Event_0nf9xf1">
+        <dc:Bounds x="232" y="762" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pa6rbs_di" bpmnElement="consult_format">
+        <dc:Bounds x="320" y="740" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gxzf15_di" bpmnElement="consult_consult">
+        <dc:Bounds x="480" y="740" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04y3ki7_di" bpmnElement="consult_send">
+        <dc:Bounds x="640" y="740" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cpiy4l_di" bpmnElement="consult_note">
+        <dc:Bounds x="800" y="740" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0duifib_di" bpmnElement="EE_consulter_core_consult_success">
+        <dc:Bounds x="962" y="762" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11fyer3_di" bpmnElement="EE_consulter_core_consult_failAI">
+        <dc:Bounds x="962" y="882" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0c6996o_di" bpmnElement="EE_consulter_core_consult_failFormat">
+        <dc:Bounds x="962" y="962" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1r5ieyo_di" bpmnElement="Event_1w7j284">
+        <dc:Bounds x="332" y="802" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1dfrh9o_di" bpmnElement="Event_0kr91s1">
+        <dc:Bounds x="492" y="802" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1qbzwwm_di" bpmnElement="SE_consulter_core_consult">
+        <di:waypoint x="268" y="780" />
+        <di:waypoint x="320" y="780" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hlrz5e_di" bpmnElement="Flow_1hlrz5e">
+        <di:waypoint x="420" y="780" />
+        <di:waypoint x="480" y="780" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1akuh9y_di" bpmnElement="Flow_1akuh9y">
+        <di:waypoint x="580" y="780" />
+        <di:waypoint x="640" y="780" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qipazj_di" bpmnElement="Flow_0qipazj">
+        <di:waypoint x="740" y="780" />
+        <di:waypoint x="800" y="780" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09qm8oq_di" bpmnElement="Flow_09qm8oq">
+        <di:waypoint x="900" y="780" />
+        <di:waypoint x="962" y="780" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dcj3sl_di" bpmnElement="Flow_1dcj3sl">
+        <di:waypoint x="510" y="838" />
+        <di:waypoint x="510" y="900" />
+        <di:waypoint x="962" y="900" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="537" y="850" width="86" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wy1h5a_di" bpmnElement="Flow_1wy1h5a">
+        <di:waypoint x="350" y="838" />
+        <di:waypoint x="350" y="980" />
+        <di:waypoint x="962" y="980" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="525" y="946" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

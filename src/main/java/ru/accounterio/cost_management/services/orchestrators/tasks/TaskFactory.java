@@ -1,8 +1,7 @@
 package ru.accounterio.cost_management.services.orchestrators.tasks;
 
-import ru.accounterio.cost_management.dto.Advice;
-import ru.accounterio.cost_management.dto.Consultation;
 import ru.accounterio.cost_management.dto.ReceiptImage;
+import ru.accounterio.cost_management.dto.Situation;
 
 public class TaskFactory {
     private Command command;
@@ -16,11 +15,11 @@ public class TaskFactory {
         return new ReceiptProcessTask(receiptImage, command.get());
     }
 
-    public ConsultUserTask createConsultUserTask(Consultation consultation) {
-        return new ConsultUserTask(consultation, command.get());
+    public ConsultUserTask createConsultUserTask(Situation situation) {
+        return new ConsultUserTask(situation, command.get());
     }
 
-    public AdviceUserTask createAdviceUserTask(Advice advice) {
-        return new AdviceUserTask(advice, command.get());
+    public AdviceUserTask createAdviceUserTask(Situation situation) {
+        return new AdviceUserTask(situation, command.get());
     }
 }

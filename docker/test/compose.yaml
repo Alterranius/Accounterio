@@ -1,0 +1,44 @@
+services:
+  db_pg_15:
+    image: postgres:15
+    container_name: accounterio_postgres
+    ports:
+      - "8080:5432"
+
+  accounterio_core:
+    container_name: accounterio_core
+    image: accounterio_core:test
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../.
+    depends_on:
+      - db_pg_15
+    ports:
+      - "8080:8080"
+
+  tele_core:
+    container_name: tele_core
+    image: accounterio_tele_core:test
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../tele_core
+    ports:
+      - "80:80"
+
+  receiptai_processor:
+    container_name: receiptai_processor
+    image: accounterio_receiptai_processor:test
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../receiptai_processor
+    ports:
+      - "80:8080"
+
+  consulter_core:
+    container_name: consulter_core
+    image: accounterio_consulter_core:test
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../consulter_core
+    ports:
+      - "80:8070"

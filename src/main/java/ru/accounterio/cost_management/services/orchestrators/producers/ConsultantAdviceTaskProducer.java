@@ -4,13 +4,13 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.accounterio.cost_management.config.RabbitConfig;
-import ru.accounterio.cost_management.services.orchestrators.tasks.ConsultUserTask;
 import ru.accounterio.cost_management.interfaces.RabbitProducer;
+import ru.accounterio.cost_management.services.orchestrators.tasks.AdviceUserTask;
 
 @Component
-public class BotConsultTaskProducer extends RabbitProducer<ConsultUserTask> {
+public class ConsultantAdviceTaskProducer extends RabbitProducer<AdviceUserTask> {
     @Autowired
-    public BotConsultTaskProducer(RabbitTemplate rabbitTemplate) {
-        super(RabbitConfig.botTasksRoutingKey, rabbitTemplate);
+    public ConsultantAdviceTaskProducer(RabbitTemplate rabbitTemplate) {
+        super(RabbitConfig.consultantTasksRoutingKey, rabbitTemplate);
     }
 }

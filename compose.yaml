@@ -4,3 +4,51 @@ services:
     container_name: accounterio_postgres
     env_file:
       - .env
+    ports:
+      - "8080:5432"
+
+  accounterio_core:
+    container_name: accounterio_core
+    build:
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db_pg_15
+    ports:
+      - "8080:8080"
+
+  tele_core:
+    container_name: tele_core
+    build:
+      dockerfile: ./tele_core/Dockerfile
+    ports:
+      - "80:80"
+
+  receiptai_processor:
+    container_name: receiptai_processor
+    build:
+      dockerfile: ./receiptai_processor/Dockerfile
+    ports:
+      - "80:8080"
+
+  consulter_core:
+    container_name: consulter_core
+    build:
+      dockerfile: ./consulter_core/Dockerfile
+    ports:
+      - "80:8070"
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - "8080:8070"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    env_file:
+      - .env
+    ports:
+      - "8080:8060"

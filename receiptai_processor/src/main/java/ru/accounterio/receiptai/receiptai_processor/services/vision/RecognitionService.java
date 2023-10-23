@@ -1,5 +1,6 @@
 package ru.accounterio.receiptai.receiptai_processor.services.vision;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.accounterio.receiptai.receiptai_processor.domains.Recognizable;
@@ -15,6 +16,7 @@ public class RecognitionService {
         this.receiptRecognizer = receiptRecognizer;
     }
 
+    @Timed("recognitionTime")
     public RecognitionResult recognize(Recognizable recognizable) {
         return receiptRecognizer.recognize(recognizable);
     }

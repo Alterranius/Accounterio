@@ -25,7 +25,7 @@ public class UserServiceSimple implements UserService {
 
     @Override
     public boolean login(User user) {
-        return false;
+        return true;
     }
 
     @Override

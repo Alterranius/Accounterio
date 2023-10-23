@@ -1,234 +1,321 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ihvksz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.16.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ihvksz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.16.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
   <bpmn:collaboration id="Collaboration_0fnpxxr">
-    <bpmn:participant id="Participant_194m40w" name="Добавление чека в затраты" processRef="Process_0h9x2h9" />
-    <bpmn:participant id="Participant_1wo4v2l" name="Запросить консультацию" processRef="Process_1c9pxdb" />
-    <bpmn:participant id="Participant_1sljq41" name="Запросить суммариз" processRef="Process_01wxr8z" />
-    <bpmn:participant id="Participant_1p8zrm6" name="Начать работу" processRef="Process_09k0g4d" />
+    <bpmn:participant id="p__tele_core_newReceipt" name="Добавление чека в затраты" processRef="tele_core_newReceipt" />
+    <bpmn:participant id="p__tele_core_consult" name="Запросить консультацию" processRef="tele_core_consult" />
+    <bpmn:participant id="p__tele_core_advice" name="Запросить совет" processRef="tele_core_advice" />
+    <bpmn:participant id="p__tele_core_start" name="Начать работу" processRef="tele_core_start" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0h9x2h9" isExecutable="true" camunda:historyTimeToLive="180">
+  <bpmn:process id="tele_core_newReceipt" name="tele_core_newReceipt" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:laneSet id="LaneSet_1d5zoo4" />
-    <bpmn:userTask id="Activity_1lhutbq" name="Отправить чек в телеграме">
-      <bpmn:incoming>Flow_1rd3vdc</bpmn:incoming>
-      <bpmn:outgoing>Flow_0q1ls5n</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Gateway_0l081ea">
+    <bpmn:exclusiveGateway id="newReceipt_isSuccess">
       <bpmn:incoming>Flow_0o8b7yh</bpmn:incoming>
       <bpmn:outgoing>Flow_04agtai</bpmn:outgoing>
       <bpmn:outgoing>Flow_06hvqd1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="Event_0141nq4" name="Чек не добавлен">
+    <bpmn:endEvent id="EE_tele_core_newReceipt_fail" name="Чек не добавлен">
       <bpmn:incoming>Flow_0qicayz</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_1mm15hy" name="Чек добавлен">
+    <bpmn:endEvent id="EE_tele_core_newReceipt_success" name="Чек добавлен">
       <bpmn:incoming>Flow_0od3b49</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_00tqe53" name="Оповестить об удачном добавлении">
+    <bpmn:serviceTask id="newReceipt_Success" name="Оповестить об удачном добавлении">
       <bpmn:incoming>Flow_04agtai</bpmn:incoming>
       <bpmn:outgoing>Flow_0od3b49</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0ur9xsx" name="Указать проблему">
+    <bpmn:serviceTask id="newReceipt_Exception" name="Указать проблему">
       <bpmn:incoming>Flow_06hvqd1</bpmn:incoming>
       <bpmn:outgoing>Flow_0qicayz</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:userTask id="Activity_12c7ruu" name="Идентифицироваться">
-      <bpmn:incoming>Flow_0m7m5ob</bpmn:incoming>
-      <bpmn:outgoing>Flow_1rd3vdc</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:startEvent id="StartEvent_new" name="Команда /new">
+    <bpmn:startEvent id="SE_tele_core_newReceipt" name="Команда /new">
       <bpmn:outgoing>Flow_0m7m5ob</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:callActivity id="Activity_1ipakg7" name="Обработать содержимое чека">
+    <bpmn:callActivity id="newReceipt_Process" name="Обработать содержимое чека">
       <bpmn:incoming>Flow_0q1ls5n</bpmn:incoming>
       <bpmn:outgoing>Flow_0o8b7yh</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:endEvent id="Event_0phbt39" name="Время ожидания истекло">
+    <bpmn:endEvent id="EE_tele_core_newReceipt_timeOut" name="Время ожидания истекло">
       <bpmn:incoming>Flow_0majss2</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_12gy8aw" name="Уведомить о долгом ожидании">
+    <bpmn:serviceTask id="newReceipt_TimeOut" name="Уведомить о долгом ожидании">
       <bpmn:incoming>Flow_1y5oar1</bpmn:incoming>
       <bpmn:outgoing>Flow_0majss2</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="Event_16daj1s" attachedToRef="Activity_1ipakg7">
+    <bpmn:boundaryEvent id="Event_16daj1s" attachedToRef="newReceipt_Process">
       <bpmn:outgoing>Flow_1y5oar1</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0dwe5gr" />
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0dwe5gr">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT3M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1rd3vdc" sourceRef="Activity_12c7ruu" targetRef="Activity_1lhutbq" />
-    <bpmn:sequenceFlow id="Flow_0q1ls5n" sourceRef="Activity_1lhutbq" targetRef="Activity_1ipakg7" />
-    <bpmn:sequenceFlow id="Flow_0o8b7yh" sourceRef="Activity_1ipakg7" targetRef="Gateway_0l081ea" />
-    <bpmn:sequenceFlow id="Flow_04agtai" name="Успешная обработка" sourceRef="Gateway_0l081ea" targetRef="Activity_00tqe53" />
-    <bpmn:sequenceFlow id="Flow_06hvqd1" name="Ошибка обработки" sourceRef="Gateway_0l081ea" targetRef="Activity_0ur9xsx" />
-    <bpmn:sequenceFlow id="Flow_0qicayz" sourceRef="Activity_0ur9xsx" targetRef="Event_0141nq4" />
-    <bpmn:sequenceFlow id="Flow_0od3b49" sourceRef="Activity_00tqe53" targetRef="Event_1mm15hy" />
-    <bpmn:sequenceFlow id="Flow_0m7m5ob" sourceRef="StartEvent_new" targetRef="Activity_12c7ruu" />
-    <bpmn:sequenceFlow id="Flow_0majss2" sourceRef="Activity_12gy8aw" targetRef="Event_0phbt39" />
-    <bpmn:sequenceFlow id="Flow_1y5oar1" name="3 минуты" sourceRef="Event_16daj1s" targetRef="Activity_12gy8aw" />
+    <bpmn:sequenceFlow id="Flow_0q1ls5n" sourceRef="newReceipt_Input" targetRef="newReceipt_Process" />
+    <bpmn:sequenceFlow id="Flow_0o8b7yh" sourceRef="newReceipt_Process" targetRef="newReceipt_isSuccess" />
+    <bpmn:sequenceFlow id="Flow_04agtai" name="Успешная обработка" sourceRef="newReceipt_isSuccess" targetRef="newReceipt_Success" />
+    <bpmn:sequenceFlow id="Flow_06hvqd1" name="Ошибка обработки" sourceRef="newReceipt_isSuccess" targetRef="newReceipt_Exception" />
+    <bpmn:sequenceFlow id="Flow_0qicayz" sourceRef="newReceipt_Exception" targetRef="EE_tele_core_newReceipt_fail" />
+    <bpmn:sequenceFlow id="Flow_0od3b49" sourceRef="newReceipt_Success" targetRef="EE_tele_core_newReceipt_success" />
+    <bpmn:sequenceFlow id="Flow_0m7m5ob" sourceRef="SE_tele_core_newReceipt" targetRef="newReceipt_Input" />
+    <bpmn:sequenceFlow id="Flow_0majss2" sourceRef="newReceipt_TimeOut" targetRef="EE_tele_core_newReceipt_timeOut" />
+    <bpmn:sequenceFlow id="Flow_1y5oar1" name="3 минуты" sourceRef="Event_16daj1s" targetRef="newReceipt_TimeOut" />
+    <bpmn:userTask id="newReceipt_Input" name="Отправить чек в телеграме">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0m7m5ob</bpmn:incoming>
+      <bpmn:outgoing>Flow_0q1ls5n</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
-  <bpmn:process id="Process_1c9pxdb" isExecutable="false">
-    <bpmn:startEvent id="Event_038ipyh" name="Команда /consult">
+  <bpmn:process id="tele_core_consult" name="tele_core_consult" isExecutable="true">
+    <bpmn:startEvent id="SE_tele_core_consult" name="Команда /consult">
       <bpmn:outgoing>Flow_0br2qoo</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Activity_0qthq7a" name="Идентифицироваться">
+    <bpmn:callActivity id="consult_Process" name="Сформировать консультацию">
       <bpmn:incoming>Flow_0br2qoo</bpmn:incoming>
-      <bpmn:outgoing>Flow_0v770tn</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:callActivity id="Activity_1i8n06v" name="Запросить консультацию">
-      <bpmn:incoming>Flow_0v770tn</bpmn:incoming>
       <bpmn:outgoing>Flow_060dx1k</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:exclusiveGateway id="Gateway_1d5sbgl">
+    <bpmn:exclusiveGateway id="consult_isSuccess">
       <bpmn:incoming>Flow_060dx1k</bpmn:incoming>
       <bpmn:outgoing>Flow_1qcvox1</bpmn:outgoing>
       <bpmn:outgoing>Flow_10pkm2t</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_1mqqo3d" name="Вывести консультацию">
+    <bpmn:serviceTask id="consult_Success" name="Вывести консультацию">
       <bpmn:incoming>Flow_1qcvox1</bpmn:incoming>
       <bpmn:outgoing>Flow_13pn15g</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0zgkf4z" name="Указать проблему">
+    <bpmn:serviceTask id="consult_Exception" name="Указать проблему">
       <bpmn:incoming>Flow_10pkm2t</bpmn:incoming>
       <bpmn:outgoing>Flow_1mv0tle</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="Event_0pqeecn" name="Успешная консультация">
+    <bpmn:endEvent id="EE_tele_core_consult_success" name="Успешная консультация">
       <bpmn:incoming>Flow_13pn15g</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_1d176oa" name="Ошибка консультации">
+    <bpmn:endEvent id="EE_tele_core_consult_fail" name="Ошибка консультации">
       <bpmn:incoming>Flow_1mv0tle</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_03demlj" name="Уведомить о долгом ожидании">
+    <bpmn:serviceTask id="consult_TimeOut" name="Уведомить о долгом ожидании">
       <bpmn:incoming>Flow_1cz0gzv</bpmn:incoming>
       <bpmn:outgoing>Flow_1n62rul</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="Event_1y6t7yg" name="Время ожидания истекло">
+    <bpmn:endEvent id="EE_tele_core_consult_timeOut" name="Время ожидания истекло">
       <bpmn:incoming>Flow_1n62rul</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:boundaryEvent id="Event_13p1t97" attachedToRef="Activity_1i8n06v">
+    <bpmn:boundaryEvent id="Event_13p1t97" attachedToRef="consult_Process">
       <bpmn:outgoing>Flow_1cz0gzv</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0qjv3nw" />
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0qjv3nw">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0br2qoo" sourceRef="Event_038ipyh" targetRef="Activity_0qthq7a" />
-    <bpmn:sequenceFlow id="Flow_0v770tn" sourceRef="Activity_0qthq7a" targetRef="Activity_1i8n06v" />
-    <bpmn:sequenceFlow id="Flow_060dx1k" sourceRef="Activity_1i8n06v" targetRef="Gateway_1d5sbgl" />
-    <bpmn:sequenceFlow id="Flow_1qcvox1" name="Получена" sourceRef="Gateway_1d5sbgl" targetRef="Activity_1mqqo3d" />
-    <bpmn:sequenceFlow id="Flow_10pkm2t" name="Ошибка" sourceRef="Gateway_1d5sbgl" targetRef="Activity_0zgkf4z" />
-    <bpmn:sequenceFlow id="Flow_13pn15g" sourceRef="Activity_1mqqo3d" targetRef="Event_0pqeecn" />
-    <bpmn:sequenceFlow id="Flow_1mv0tle" sourceRef="Activity_0zgkf4z" targetRef="Event_1d176oa" />
-    <bpmn:sequenceFlow id="Flow_1cz0gzv" name="1 минута" sourceRef="Event_13p1t97" targetRef="Activity_03demlj" />
-    <bpmn:sequenceFlow id="Flow_1n62rul" sourceRef="Activity_03demlj" targetRef="Event_1y6t7yg" />
+    <bpmn:sequenceFlow id="Flow_0br2qoo" sourceRef="SE_tele_core_consult" targetRef="consult_Process" />
+    <bpmn:sequenceFlow id="Flow_060dx1k" sourceRef="consult_Process" targetRef="consult_isSuccess" />
+    <bpmn:sequenceFlow id="Flow_1qcvox1" name="Получена" sourceRef="consult_isSuccess" targetRef="consult_Success" />
+    <bpmn:sequenceFlow id="Flow_10pkm2t" name="Ошибка" sourceRef="consult_isSuccess" targetRef="consult_Exception" />
+    <bpmn:sequenceFlow id="Flow_13pn15g" sourceRef="consult_Success" targetRef="EE_tele_core_consult_success" />
+    <bpmn:sequenceFlow id="Flow_1mv0tle" sourceRef="consult_Exception" targetRef="EE_tele_core_consult_fail" />
+    <bpmn:sequenceFlow id="Flow_1cz0gzv" name="1 минута" sourceRef="Event_13p1t97" targetRef="consult_TimeOut" />
+    <bpmn:sequenceFlow id="Flow_1n62rul" sourceRef="consult_TimeOut" targetRef="EE_tele_core_consult_timeOut" />
   </bpmn:process>
-  <bpmn:process id="Process_01wxr8z" isExecutable="false">
-    <bpmn:startEvent id="Event_0vbgcwx" name="Команда /summarize">
+  <bpmn:process id="tele_core_advice" name="tele_core_advice" isExecutable="true">
+    <bpmn:startEvent id="SE_tele_core_advice" name="Команда /advice">
       <bpmn:outgoing>Flow_1217rsl</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Activity_0y3c8to" name="Идентифицироваться">
+    <bpmn:callActivity id="advice_Process" name="Сформировать совет">
       <bpmn:incoming>Flow_1217rsl</bpmn:incoming>
-      <bpmn:outgoing>Flow_05owvyb</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:callActivity id="Activity_1eo2hg1" name="Запросить суммариз">
-      <bpmn:incoming>Flow_05owvyb</bpmn:incoming>
       <bpmn:outgoing>Flow_09swt2c</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:exclusiveGateway id="Gateway_0aweqrc">
+    <bpmn:exclusiveGateway id="advice_isSuccess">
       <bpmn:incoming>Flow_09swt2c</bpmn:incoming>
       <bpmn:outgoing>Flow_1livegn</bpmn:outgoing>
       <bpmn:outgoing>Flow_110cb1h</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="Event_16og161" name="Ошибка суммариз">
+    <bpmn:endEvent id="EE_tele_core_advice_fail" name="Ошибка совета">
       <bpmn:incoming>Flow_0vmcbfh</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_0ffzhll" name="Успешная выдача">
+    <bpmn:endEvent id="EE_tele_core_advice_success" name="Успешная выдача">
       <bpmn:incoming>Flow_023w7z5</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_0a7ogpf" name="Время ожидания истекло">
+    <bpmn:endEvent id="EE_tele_core_advice_timeOut" name="Время ожидания истекло">
       <bpmn:incoming>Flow_01o0pfj</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_168udk4" name="Вывести суммариз">
+    <bpmn:serviceTask id="advice_Success" name="Вывести совет">
       <bpmn:incoming>Flow_1livegn</bpmn:incoming>
       <bpmn:outgoing>Flow_023w7z5</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_01ppiny" name="Указать проблему">
+    <bpmn:serviceTask id="advice_Exception" name="Указать проблему">
       <bpmn:incoming>Flow_110cb1h</bpmn:incoming>
       <bpmn:outgoing>Flow_0vmcbfh</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1aq2pix" name="Уведомить о долгом ожидании">
+    <bpmn:serviceTask id="advice_TimeOut" name="Уведомить о долгом ожидании">
       <bpmn:incoming>Flow_05gtu90</bpmn:incoming>
       <bpmn:outgoing>Flow_01o0pfj</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="Event_0glzwfx" attachedToRef="Activity_1eo2hg1">
+    <bpmn:boundaryEvent id="Event_0glzwfx" attachedToRef="advice_Process">
       <bpmn:outgoing>Flow_05gtu90</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_1ag2z6r" />
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1ag2z6r">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1217rsl" sourceRef="Event_0vbgcwx" targetRef="Activity_0y3c8to" />
-    <bpmn:sequenceFlow id="Flow_05owvyb" sourceRef="Activity_0y3c8to" targetRef="Activity_1eo2hg1" />
-    <bpmn:sequenceFlow id="Flow_09swt2c" sourceRef="Activity_1eo2hg1" targetRef="Gateway_0aweqrc" />
-    <bpmn:sequenceFlow id="Flow_1livegn" name="Получены" sourceRef="Gateway_0aweqrc" targetRef="Activity_168udk4" />
-    <bpmn:sequenceFlow id="Flow_110cb1h" name="Ошибка получения" sourceRef="Gateway_0aweqrc" targetRef="Activity_01ppiny" />
-    <bpmn:sequenceFlow id="Flow_0vmcbfh" sourceRef="Activity_01ppiny" targetRef="Event_16og161" />
-    <bpmn:sequenceFlow id="Flow_023w7z5" sourceRef="Activity_168udk4" targetRef="Event_0ffzhll" />
-    <bpmn:sequenceFlow id="Flow_01o0pfj" sourceRef="Activity_1aq2pix" targetRef="Event_0a7ogpf" />
-    <bpmn:sequenceFlow id="Flow_05gtu90" name="1 минута" sourceRef="Event_0glzwfx" targetRef="Activity_1aq2pix" />
+    <bpmn:sequenceFlow id="Flow_1217rsl" sourceRef="SE_tele_core_advice" targetRef="advice_Process" />
+    <bpmn:sequenceFlow id="Flow_09swt2c" sourceRef="advice_Process" targetRef="advice_isSuccess" />
+    <bpmn:sequenceFlow id="Flow_1livegn" name="Получен" sourceRef="advice_isSuccess" targetRef="advice_Success" />
+    <bpmn:sequenceFlow id="Flow_110cb1h" name="Ошибка получения" sourceRef="advice_isSuccess" targetRef="advice_Exception" />
+    <bpmn:sequenceFlow id="Flow_0vmcbfh" sourceRef="advice_Exception" targetRef="EE_tele_core_advice_fail" />
+    <bpmn:sequenceFlow id="Flow_023w7z5" sourceRef="advice_Success" targetRef="EE_tele_core_advice_success" />
+    <bpmn:sequenceFlow id="Flow_01o0pfj" sourceRef="advice_TimeOut" targetRef="EE_tele_core_advice_timeOut" />
+    <bpmn:sequenceFlow id="Flow_05gtu90" name="1 минута" sourceRef="Event_0glzwfx" targetRef="advice_TimeOut" />
   </bpmn:process>
-  <bpmn:process id="Process_09k0g4d" isExecutable="false">
-    <bpmn:startEvent id="Event_1qanf5r" name="Команда /start">
+  <bpmn:process id="tele_core_start" name="tele_core_start" isExecutable="true">
+    <bpmn:startEvent id="SE_tele_core_start" name="Команда /start">
       <bpmn:outgoing>Flow_1lxks8j</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Activity_1e6zdt3" name="Вывести приветствие и команды">
+    <bpmn:serviceTask id="start_Help" name="Вывести приветствие и команды">
       <bpmn:incoming>Flow_1lxks8j</bpmn:incoming>
       <bpmn:outgoing>Flow_0wbq5wd</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="Event_1t4w18w">
+    <bpmn:endEvent id="EE_tele_core_start_success">
       <bpmn:incoming>Flow_0wbq5wd</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1lxks8j" sourceRef="Event_1qanf5r" targetRef="Activity_1e6zdt3" />
-    <bpmn:sequenceFlow id="Flow_0wbq5wd" sourceRef="Activity_1e6zdt3" targetRef="Event_1t4w18w" />
+    <bpmn:sequenceFlow id="Flow_1lxks8j" sourceRef="SE_tele_core_start" targetRef="start_Help" />
+    <bpmn:sequenceFlow id="Flow_0wbq5wd" sourceRef="start_Help" targetRef="EE_tele_core_start_success" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0fnpxxr">
-      <bpmndi:BPMNShape id="Participant_1wo4v2l_di" bpmnElement="Participant_1wo4v2l" isHorizontal="true">
+      <bpmndi:BPMNShape id="Participant_194m40w_di" bpmnElement="p__tele_core_newReceipt" isHorizontal="true">
+        <dc:Bounds x="160" y="1490" width="1080" height="510" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0l081ea_di" bpmnElement="newReceipt_isSuccess" isMarkerVisible="true">
+        <dc:Bounds x="825" y="1615" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0141nq4_di" bpmnElement="EE_tele_core_newReceipt_fail">
+        <dc:Bounds x="1112" y="1712" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1087" y="1755" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1mm15hy_di" bpmnElement="EE_tele_core_newReceipt_success">
+        <dc:Bounds x="1112" y="1542" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1095" y="1585" width="71" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10m82qi_di" bpmnElement="newReceipt_Success">
+        <dc:Bounds x="940" y="1520" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0e2vf3p_di" bpmnElement="newReceipt_Exception">
+        <dc:Bounds x="940" y="1690" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="SE_tele_core_newReceipt">
+        <dc:Bounds x="232" y="1622" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="214" y="1665" width="73" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wj8tur_di" bpmnElement="newReceipt_Process">
+        <dc:Bounds x="660" y="1600" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0phbt39_di" bpmnElement="EE_tele_core_newReceipt_timeOut">
+        <dc:Bounds x="1112" y="1862" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1087" y="1905" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00c6aej_di" bpmnElement="newReceipt_TimeOut">
+        <dc:Bounds x="940" y="1840" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ubr3w7_di" bpmnElement="newReceipt_Input">
+        <dc:Bounds x="420" y="1600" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1c2skz6_di" bpmnElement="Event_16daj1s">
+        <dc:Bounds x="662" y="1662" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0q1ls5n_di" bpmnElement="Flow_0q1ls5n">
+        <di:waypoint x="520" y="1640" />
+        <di:waypoint x="660" y="1640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0o8b7yh_di" bpmnElement="Flow_0o8b7yh">
+        <di:waypoint x="760" y="1640" />
+        <di:waypoint x="825" y="1640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04agtai_di" bpmnElement="Flow_04agtai">
+        <di:waypoint x="850" y="1615" />
+        <di:waypoint x="850" y="1560" />
+        <di:waypoint x="940" y="1560" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="853" y="1526" width="54" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06hvqd1_di" bpmnElement="Flow_06hvqd1">
+        <di:waypoint x="850" y="1665" />
+        <di:waypoint x="850" y="1730" />
+        <di:waypoint x="940" y="1730" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="853" y="1736" width="53" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qicayz_di" bpmnElement="Flow_0qicayz">
+        <di:waypoint x="1040" y="1730" />
+        <di:waypoint x="1112" y="1730" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0od3b49_di" bpmnElement="Flow_0od3b49">
+        <di:waypoint x="1040" y="1560" />
+        <di:waypoint x="1112" y="1560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0m7m5ob_di" bpmnElement="Flow_0m7m5ob">
+        <di:waypoint x="268" y="1640" />
+        <di:waypoint x="420" y="1640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0majss2_di" bpmnElement="Flow_0majss2">
+        <di:waypoint x="1040" y="1880" />
+        <di:waypoint x="1112" y="1880" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y5oar1_di" bpmnElement="Flow_1y5oar1">
+        <di:waypoint x="680" y="1698" />
+        <di:waypoint x="680" y="1880" />
+        <di:waypoint x="940" y="1880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="686" y="1703" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_1wo4v2l_di" bpmnElement="p__tele_core_consult" isHorizontal="true">
         <dc:Bounds x="160" y="930" width="910" height="480" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_038ipyh_di" bpmnElement="Event_038ipyh">
+      <bpmndi:BPMNShape id="Event_038ipyh_di" bpmnElement="SE_tele_core_consult">
         <dc:Bounds x="252" y="1072" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="227" y="1115" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0sl30f7_di" bpmnElement="Activity_0qthq7a">
-        <dc:Bounds x="340" y="1050" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0vukpzw_di" bpmnElement="Activity_1i8n06v">
+      <bpmndi:BPMNShape id="Activity_0vukpzw_di" bpmnElement="consult_Process">
         <dc:Bounds x="500" y="1050" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1d5sbgl_di" bpmnElement="Gateway_1d5sbgl" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="Gateway_1d5sbgl_di" bpmnElement="consult_isSuccess" isMarkerVisible="true">
         <dc:Bounds x="665" y="1065" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0quy601_di" bpmnElement="Activity_1mqqo3d">
+      <bpmndi:BPMNShape id="Activity_0quy601_di" bpmnElement="consult_Success">
         <dc:Bounds x="780" y="960" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1eqgbpv_di" bpmnElement="Activity_0zgkf4z">
+      <bpmndi:BPMNShape id="Activity_1eqgbpv_di" bpmnElement="consult_Exception">
         <dc:Bounds x="780" y="1150" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0pqeecn_di" bpmnElement="Event_0pqeecn">
+      <bpmndi:BPMNShape id="Event_0pqeecn_di" bpmnElement="EE_tele_core_consult_success">
         <dc:Bounds x="952" y="982" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="936" y="1025" width="69" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1d176oa_di" bpmnElement="Event_1d176oa">
+      <bpmndi:BPMNShape id="Event_1d176oa_di" bpmnElement="EE_tele_core_consult_fail">
         <dc:Bounds x="952" y="1172" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="936" y="1215" width="69" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ks5fb3_di" bpmnElement="Activity_03demlj">
+      <bpmndi:BPMNShape id="Activity_0ks5fb3_di" bpmnElement="consult_TimeOut">
         <dc:Bounds x="780" y="1290" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1y6t7yg_di" bpmnElement="Event_1y6t7yg">
+      <bpmndi:BPMNShape id="Event_1y6t7yg_di" bpmnElement="EE_tele_core_consult_timeOut">
         <dc:Bounds x="952" y="1312" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="927" y="1355" width="87" height="27" />
@@ -239,10 +326,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0br2qoo_di" bpmnElement="Flow_0br2qoo">
         <di:waypoint x="288" y="1090" />
-        <di:waypoint x="340" y="1090" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0v770tn_di" bpmnElement="Flow_0v770tn">
-        <di:waypoint x="440" y="1090" />
         <di:waypoint x="500" y="1090" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_060dx1k_di" bpmnElement="Flow_060dx1k">
@@ -285,50 +368,49 @@
         <di:waypoint x="880" y="1330" />
         <di:waypoint x="952" y="1330" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Participant_1sljq41_di" bpmnElement="Participant_1sljq41" isHorizontal="true">
+      <bpmndi:BPMNShape id="Participant_1sljq41_di" bpmnElement="p__tele_core_advice" isHorizontal="true">
         <dc:Bounds x="160" y="370" width="910" height="480" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0vbgcwx_di" bpmnElement="Event_0vbgcwx">
+      <bpmndi:BPMNShape id="Event_0vbgcwx_di" bpmnElement="SE_tele_core_advice">
         <dc:Bounds x="252" y="532" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="242" y="575" width="56" height="27" />
+          <dc:Bounds x="229" y="575" width="83" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0z5ve64_di" bpmnElement="Activity_0y3c8to">
-        <dc:Bounds x="340" y="510" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0yjzmhi_di" bpmnElement="Activity_1eo2hg1">
+      <bpmndi:BPMNShape id="Activity_0yjzmhi_di" bpmnElement="advice_Process">
         <dc:Bounds x="500" y="510" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0aweqrc_di" bpmnElement="Gateway_0aweqrc" isMarkerVisible="true">
+      <bpmndi:BPMNShape id="Gateway_0aweqrc_di" bpmnElement="advice_isSuccess" isMarkerVisible="true">
         <dc:Bounds x="665" y="525" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_16og161_di" bpmnElement="Event_16og161">
+      <bpmndi:BPMNShape id="Event_16og161_di" bpmnElement="EE_tele_core_advice_fail">
         <dc:Bounds x="952" y="622" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="945" y="665" width="50" height="27" />
+          <dc:Bounds x="931" y="665" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0ffzhll_di" bpmnElement="Event_0ffzhll">
+      <bpmndi:BPMNShape id="Event_0ffzhll_di" bpmnElement="EE_tele_core_advice_success">
         <dc:Bounds x="952" y="442" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="945" y="485" width="50" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0a7ogpf_di" bpmnElement="Event_0a7ogpf">
+      <bpmndi:BPMNShape id="Event_0a7ogpf_di" bpmnElement="EE_tele_core_advice_timeOut">
         <dc:Bounds x="952" y="752" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="927" y="795" width="87" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_167eyyi_di" bpmnElement="Activity_168udk4">
+      <bpmndi:BPMNShape id="Activity_167eyyi_di" bpmnElement="advice_Success">
         <dc:Bounds x="780" y="420" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0c7hyq8_di" bpmnElement="Activity_01ppiny">
+      <bpmndi:BPMNShape id="Activity_0c7hyq8_di" bpmnElement="advice_Exception">
         <dc:Bounds x="780" y="600" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_08bm3c7_di" bpmnElement="Activity_1aq2pix">
+      <bpmndi:BPMNShape id="Activity_08bm3c7_di" bpmnElement="advice_TimeOut">
         <dc:Bounds x="780" y="730" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1k1fffq_di" bpmnElement="Event_0glzwfx">
@@ -336,10 +418,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1217rsl_di" bpmnElement="Flow_1217rsl">
         <di:waypoint x="288" y="550" />
-        <di:waypoint x="340" y="550" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_05owvyb_di" bpmnElement="Flow_05owvyb">
-        <di:waypoint x="440" y="550" />
         <di:waypoint x="500" y="550" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09swt2c_di" bpmnElement="Flow_09swt2c">
@@ -351,7 +429,7 @@
         <di:waypoint x="690" y="460" />
         <di:waypoint x="780" y="460" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="704" y="443" width="52" height="14" />
+          <dc:Bounds x="708" y="443" width="44" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_110cb1h_di" bpmnElement="Flow_110cb1h">
@@ -382,126 +460,20 @@
           <dc:Bounds x="527" y="613" width="46" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Participant_194m40w_di" bpmnElement="Participant_194m40w" isHorizontal="true">
-        <dc:Bounds x="160" y="1490" width="1080" height="510" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ubr3w7_di" bpmnElement="Activity_1lhutbq">
-        <dc:Bounds x="500" y="1600" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0l081ea_di" bpmnElement="Gateway_0l081ea" isMarkerVisible="true">
-        <dc:Bounds x="825" y="1615" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0141nq4_di" bpmnElement="Event_0141nq4">
-        <dc:Bounds x="1112" y="1712" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1087" y="1755" width="86" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1mm15hy_di" bpmnElement="Event_1mm15hy">
-        <dc:Bounds x="1112" y="1542" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1095" y="1585" width="71" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_10m82qi_di" bpmnElement="Activity_00tqe53">
-        <dc:Bounds x="940" y="1520" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0e2vf3p_di" bpmnElement="Activity_0ur9xsx">
-        <dc:Bounds x="940" y="1690" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1v9obsm_di" bpmnElement="Activity_12c7ruu">
-        <dc:Bounds x="330" y="1600" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_new">
-        <dc:Bounds x="232" y="1622" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="214" y="1665" width="73" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0wj8tur_di" bpmnElement="Activity_1ipakg7">
-        <dc:Bounds x="660" y="1600" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0phbt39_di" bpmnElement="Event_0phbt39">
-        <dc:Bounds x="1112" y="1862" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1087" y="1905" width="87" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_00c6aej_di" bpmnElement="Activity_12gy8aw">
-        <dc:Bounds x="940" y="1840" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1c2skz6_di" bpmnElement="Event_16daj1s">
-        <dc:Bounds x="662" y="1662" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1rd3vdc_di" bpmnElement="Flow_1rd3vdc">
-        <di:waypoint x="430" y="1640" />
-        <di:waypoint x="500" y="1640" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0q1ls5n_di" bpmnElement="Flow_0q1ls5n">
-        <di:waypoint x="600" y="1640" />
-        <di:waypoint x="660" y="1640" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0o8b7yh_di" bpmnElement="Flow_0o8b7yh">
-        <di:waypoint x="760" y="1640" />
-        <di:waypoint x="825" y="1640" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_04agtai_di" bpmnElement="Flow_04agtai">
-        <di:waypoint x="850" y="1615" />
-        <di:waypoint x="850" y="1560" />
-        <di:waypoint x="940" y="1560" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="853" y="1526" width="54" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_06hvqd1_di" bpmnElement="Flow_06hvqd1">
-        <di:waypoint x="850" y="1665" />
-        <di:waypoint x="850" y="1730" />
-        <di:waypoint x="940" y="1730" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="853" y="1736" width="53" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0qicayz_di" bpmnElement="Flow_0qicayz">
-        <di:waypoint x="1040" y="1730" />
-        <di:waypoint x="1112" y="1730" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0od3b49_di" bpmnElement="Flow_0od3b49">
-        <di:waypoint x="1040" y="1560" />
-        <di:waypoint x="1112" y="1560" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0m7m5ob_di" bpmnElement="Flow_0m7m5ob">
-        <di:waypoint x="268" y="1640" />
-        <di:waypoint x="330" y="1640" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0majss2_di" bpmnElement="Flow_0majss2">
-        <di:waypoint x="1040" y="1880" />
-        <di:waypoint x="1112" y="1880" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1y5oar1_di" bpmnElement="Flow_1y5oar1">
-        <di:waypoint x="680" y="1698" />
-        <di:waypoint x="680" y="1880" />
-        <di:waypoint x="940" y="1880" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="686" y="1703" width="48" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Participant_1p8zrm6_di" bpmnElement="Participant_1p8zrm6" isHorizontal="true">
+      <bpmndi:BPMNShape id="Participant_1p8zrm6_di" bpmnElement="p__tele_core_start" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="470" height="220" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1qanf5r_di" bpmnElement="Event_1qanf5r">
+      <bpmndi:BPMNShape id="Event_1qanf5r_di" bpmnElement="SE_tele_core_start">
         <dc:Bounds x="232" y="172" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="213" y="215" width="74" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_02ndc7t_di" bpmnElement="Activity_1e6zdt3">
+      <bpmndi:BPMNShape id="Activity_02ndc7t_di" bpmnElement="start_Help">
         <dc:Bounds x="320" y="150" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1t4w18w_di" bpmnElement="Event_1t4w18w">
+      <bpmndi:BPMNShape id="Event_1t4w18w_di" bpmnElement="EE_tele_core_start_success">
         <dc:Bounds x="472" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1lxks8j_di" bpmnElement="Flow_1lxks8j">

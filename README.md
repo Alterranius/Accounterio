@@ -1,5 +1,5 @@
 # Accounter.io
-Hyperlinks
+*Work in progress*
 ## Goals
 
 Accounter.io is a smart **accountant** and **receipt autoparsing** system powered by LLM and computer vision
@@ -15,21 +15,29 @@ The main goals of Accounter.io are:
 ## Solutions
 Let's see how Accounter.io solve a couple of common problems:
 
-Problem  | Solution
-------------- | -------------
-Huge variety of cost categories | Context-sensitive categories
-Manual and distributed cost management | Centralized easy-scalable automation
-Manual receipt input | Only one image
+| Problem                                | Solution                             |
+|----------------------------------------|--------------------------------------|
+| Huge variety of cost categories        | Context-sensitive categories         |
+| Manual and distributed cost management | Centralized easy-scalable automation |
+| Manual receipt content input           | Telegram image                       |
+
 ## News
-**17 October:**
+**22 October:**
 
-* Project sources init
-* Conceptual development
+* Test
+* Services impl
+* API fix
+* Metrics
 
-**16 October:**
+**21 October:**
 
-* Project documentation init
-* Conceptual development
+* Message system
+* CI/CD development
+
+**20 October:**
+
+* Services impl
+* Components interaction impl
 ## Accounter.io Structure
 Accounter.io Services uses jdk17-21
 
@@ -53,6 +61,6 @@ Accounter.io Services uses jdk17-21
 *After main platform will be developed*
 
 ## Coming Soon
-
-* Roadmap
-* Conceptual
+* Capabilities
+* First Stage end
+* AI Integration

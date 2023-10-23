@@ -3,22 +3,28 @@ spring:
     url: jdbc:h2:file:./camunda-h2-database
     username: u
     password: 1
+
   liquibase:
     enabled: true
+
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create
+
   h2:
     console:
       enabled: true
+
   docker:
     compose:
       enabled: true
       skip:
         in-tests: true # test containers used
+      lifecycle-management: start_and_stop
+
   rabbitmq:
-    host: localhost
+    host: localhost:8080
     username: admin
     password: admin
     port: 5672
@@ -28,6 +34,19 @@ camunda:
     admin-user:
       id: admin
       password: admin
+    filter:
+      create: All tasks
+
+management:
+  endpoints.web.exposure.include: 'prometheus, health'
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 
 springdoc:
   override-with-generic-response: false

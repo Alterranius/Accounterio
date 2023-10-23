@@ -1,5 +1,6 @@
 package ru.accounterio.receiptai.receiptai_processor.services.classificator;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.accounterio.receiptai.receiptai_processor.domains.CostSet;
@@ -15,6 +16,7 @@ public class ClassificationCostService {
         this.costClassifier = costClassifier;
     }
 
+    @Timed("classificationTime")
     public CostSet classify(CostSet costSet) {
         return null; //new Position(position.name(), position.price(), costClassifier.classify(position));
     }
