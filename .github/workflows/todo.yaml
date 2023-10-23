@@ -32,15 +32,15 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
       - name: Stop containers
-        run: docker compose stop -fdocker/test/compose.yaml
+        run: docker compose -f docker/test/compose.yaml stop
       - name: Clear data
         run: docker system prune
       - name: compose
-        run: docker compose up -fdocker/test/compose.yaml -d
+        run: docker compose -f docker/test/compose.yaml up -d
 
   deployment:
     runs-on: self-hosted
-    needs: integrationTest
+    needs: test
     environment: test-env
     steps:
       - name: checkout
