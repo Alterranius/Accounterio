@@ -29,25 +29,25 @@ jobs:
     needs: test
     environment: test-env
     steps:
-      - name: Stop containers
-        run: docker-compose stop
-      - name: Clear data
-        run: docker system prune -a -f
       - name: checkout
         uses: actions/checkout@v3
+      - name: Stop containers
+        run: docker compose stop
+      - name: Clear data
+        run: docker system prune -a -f
       - name: compose
-        run: docker-compose up -d
+        run: docker compose up -d
 
   deployment:
     runs-on: self-hosted
     needs: test
     environment: test-env
     steps:
-      - name: Stop containers
-        run: docker-compose stop
-      - name: Clear data
-        run: docker system prune
       - name: checkout
         uses: actions/checkout@v3
+      - name: Stop containers
+        run: docker compose stop
+      - name: Clear data
+        run: docker system prune
       - name: compose
-        run: docker-compose up -d
+        run: docker compose up -d
