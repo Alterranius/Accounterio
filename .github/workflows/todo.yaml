@@ -32,9 +32,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
       - name: Stop containers
-        run: docker compose stop
+        run: docker compose docker/test/compose.yaml stop
       - name: Clear data
-        run: docker system prune -a -f
+        run: docker system prune
       - name: compose
         run: docker compose docker/test/compose.yaml up -d
 
