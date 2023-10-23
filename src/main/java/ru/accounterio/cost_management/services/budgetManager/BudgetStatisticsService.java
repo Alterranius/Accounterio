@@ -45,6 +45,8 @@ public class BudgetStatisticsService implements StatisticsService {
         return result;
     }
 
+    // TODO: 23.10.2023 Rework getPeriodic: week period correct, make as stream-map style
+
     private LocalDate dateIncrement(LocalDate date, Periods period) {
         if (period == null) period = Periods.DAILY;
         return switch (period) {

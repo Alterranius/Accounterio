@@ -3,6 +3,7 @@ package ru.accounterio.cost_management.services.budgetManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -28,14 +29,14 @@ public class TransactionQueueConsumerTest {
     @InjectMocks
     private TransactionQueueConsumer transactionQueueConsumer;
 
-    @Spy
+    @Mock
     private BudgetManager budgetManager;
 
-    @Spy
+    @Mock
     private UserServiceSimple userServiceSimple;
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
+//    @Autowired
+//    RabbitTemplate rabbitTemplate;
 
     @Test
     public void positionFromDto_returnCorrect() {
@@ -69,27 +70,29 @@ public class TransactionQueueConsumerTest {
         ));
     }
 
-    @Test
-    public void consume_correct() {
-        Mockito.when(userServiceSimple.getUser(0L)).thenReturn(Optional.of(User.builder().id(0L).transactions(new HashSet<>()).build()));
-        CostSet input = new CostSet(0L,
-                Map.of(
-                        new ru.accounterio.cost_management.dto.receipt.Position("Apple", 50d, null), new Quantity(5),
-                        new ru.accounterio.cost_management.dto.receipt.Position("Tomato", 60d, null), new Quantity(3),
-                        new ru.accounterio.cost_management.dto.receipt.Position("Potato", 150d, null), new Quantity(1),
-                        new ru.accounterio.cost_management.dto.receipt.Position("Pen", 20d, null), new Quantity(2)
-                ),
-                LocalDateTime.parse("2023-05-05T15:00:00"),
-                null,
-                1d);
-        rabbitTemplate.convertAndSend("accouterio-core-exchange", "costmanagement.tasks.1.0.costchannel", input);
+    // TODO: 23.10.2023 TestContainers integration (Rabbit, Liquibase, Postgres)
 
-        Transaction await = Transaction.builder().value(-620d).stamp(LocalDateTime.parse("2023-05-05T15:00:00")).build();
-        Transaction current = budgetManager.getTransactions(0L).transactionSet().last();
-
-        assertEquals(await.getValue(), current.getValue());
-        assertEquals(await.getStamp(), current.getStamp());
-        assertNotNull(current.getPositions());
-        assertFalse(current.getPositions().isEmpty());
-    }
+//    @Test
+//    public void consume_correct() {
+//        Mockito.when(userServiceSimple.getUser(0L)).thenReturn(Optional.of(User.builder().id(0L).transactions(new HashSet<>()).build()));
+//        CostSet input = new CostSet(0L,
+//                Map.of(
+//                        new ru.accounterio.cost_management.dto.receipt.Position("Apple", 50d, null), new Quantity(5),
+//                        new ru.accounterio.cost_management.dto.receipt.Position("Tomato", 60d, null), new Quantity(3),
+//                        new ru.accounterio.cost_management.dto.receipt.Position("Potato", 150d, null), new Quantity(1),
+//                        new ru.accounterio.cost_management.dto.receipt.Position("Pen", 20d, null), new Quantity(2)
+//                ),
+//                LocalDateTime.parse("2023-05-05T15:00:00"),
+//                null,
+//                1d);
+//        rabbitTemplate.convertAndSend("accouterio-core-exchange", "costmanagement.tasks.1.0.costchannel", input);
+//
+//        Transaction await = Transaction.builder().value(-620d).stamp(LocalDateTime.parse("2023-05-05T15:00:00")).build();
+//        Transaction current = budgetManager.getTransactions(0L).transactionSet().last();
+//
+//        assertEquals(await.getValue(), current.getValue());
+//        assertEquals(await.getStamp(), current.getStamp());
+//        assertNotNull(current.getPositions());
+//        assertFalse(current.getPositions().isEmpty());
+//    }
 }

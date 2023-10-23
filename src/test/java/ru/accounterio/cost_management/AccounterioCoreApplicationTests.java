@@ -14,6 +14,8 @@ public class AccounterioCoreApplicationTests {
     @Autowired
     MockMvc mockMvc;
 
+    // TODO: 23.10.2023 TestContainers + MockMVC complete API test
+
     @Test
     public void bot_receiptTaskDelegation_correct() {
 
