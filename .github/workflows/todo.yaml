@@ -40,7 +40,7 @@ jobs:
 
   deployment:
     runs-on: self-hosted
-    needs: test
+    needs: integrationTest
     environment: test-env
     steps:
       - name: checkout
